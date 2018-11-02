@@ -5,33 +5,57 @@ import org.newdawn.slick.geom.Rectangle;
 
 import core.TrueTypeFont;
 
-public class ActiveText {
-	public String text;
+public class Button {
+	/**включает отрисовку активных границ*/
 	public boolean DEBUG = false;
-	public int x, y = 0;
-	public int width, height = 100;
-	/**выравнивание текста по левому краю компонента*/
+	/**выравнивание текста по левому краю*/
 	public static final int LEFT = 0;
 	/**выравнивание текста по центру*/
 	public static final int CENTER = 1;
+	
+	public String text;
+	public int x = 0, y = 0;
+	public int width = 0, height = 0;
+	
 	private TrueTypeFont font;
 	public Rectangle hitbox;
-	private int current_align = LEFT;
-	Graphics g;		
+	private Graphics g;	
 	
-	public ActiveText(String text) {
+	private int current_align = LEFT;
+	
+	public Button(String text, int x, int y) {
+		this.x = x;
+		this.y = y;
 		this.text = text;
+		
 		hitbox = new Rectangle(x, y, width, height);
 	}
 
-	public ActiveText(String text, int x, int y, int width, int height) {
+	public Button(String text, int x, int y, int width, int height) {
 		this.text = text;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		
 		hitbox = new Rectangle(x, y, width, height);
 	}
 	
 	public void draw(Graphics g) {
 		if(this.g==null) this.g = g;
 		if(font == null) font = (TrueTypeFont) g.getFont();
+
+		if(width == 0 || height == 0) {
+			width = font.getWidth(text);
+			width += width * 0.05f;
+			height = font.getHeight(text);
+			height += height * 0.05f;
+			x += (int) (width * 0.05f);
+			y += (int) (height * 0.05f);
+			
+			hitbox = new Rectangle(x, y, width, height);
+		}
+
 		switch(current_align) {
 			case LEFT:
 				g.drawString(text, x, y);
@@ -40,6 +64,7 @@ public class ActiveText {
 				g.drawString(text, x + width/2 - font.getWidth(text)/2, y + height/2 - font.getHeight()/2);
 			break;
 		}
+		
 		if(DEBUG) g.draw(hitbox);
 	}
 		

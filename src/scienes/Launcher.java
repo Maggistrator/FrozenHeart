@@ -1,7 +1,5 @@
 package scienes;
 
-import javax.swing.JOptionPane;
-
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -30,7 +28,7 @@ public class Launcher extends StateBasedGame{
 				apploader.setTargetFrameRate(30);
 				apploader.start();
 			} catch (SlickException e1) {
-				JOptionPane.showMessageDialog(null, "Ошибка движка Slick2D. Попробуйте обновить драйверы видеокарты,"
+				System.out.println("Ошибка движка Slick2D. Попробуйте обновить драйверы видеокарты,"
 						+ "\nили переустановить игру");
 				e1.printStackTrace();
 			}				
