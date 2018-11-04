@@ -36,6 +36,8 @@ public class MainMenu extends BasicGameState {
 	Image newgame_snowhat;
 	Image about_snowhat;
 	Image exit_snowhat;
+	Image starsky;
+	Image moon;
 	
 	Font cool_font = null;
 	Font active_cool_font = null;
@@ -50,9 +52,12 @@ public class MainMenu extends BasicGameState {
 		about = new Button("About", button_x, button_y + 65, 120, 20);
 		exit = new Button("Exit", button_x, button_y + 120, 60, 20);
 		
-		newgame_snowhat = new Image("textures/ui/snow.png").getScaledCopy(1.15f);
-		about_snowhat = new Image("textures/ui/snow.png").getScaledCopy(0.9f);
-		exit_snowhat = new Image("textures/ui/snow.png").getScaledCopy(0.7f);
+		Image snow = new Image("textures/main_menu/snow.png");
+		newgame_snowhat = snow.getScaledCopy(1.15f);
+		about_snowhat = snow.getScaledCopy(0.9f);
+		exit_snowhat = snow.getScaledCopy(0.7f);
+		starsky = new Image("textures/main_menu/stars.png").getScaledCopy(0.35f);
+		moon = new Image("textures/main_menu/moon.png").getScaledCopy(0.5f);
 		
 		btnSound = new Sound("res/sounds/mparsons99__snow-crunch.ogg");
 		bgmusic = new Music("res/music/chaykovskiy.ogg");
@@ -73,6 +78,9 @@ public class MainMenu extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		setCharset_Russian(g);
+		starsky.draw(240, 50);
+		moon.draw(container.getWidth() - 200, 0);
+		
 
 		if (selected == 1) {
 			g.setFont(activeSlicFont);
