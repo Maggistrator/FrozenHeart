@@ -33,39 +33,42 @@ public class MainMenu extends BasicGameState {
 	Music bgmusic;
 	StateBasedGame game;
 	
-	Image newgame_snowhat;
-	Image about_snowhat;
-	Image exit_snowhat;
+	Image title_snowhat;
 	Image starsky;
 	Image moon;
+	Image background;
 	
+	
+	Font title_font = null;
 	Font cool_font = null;
 	Font active_cool_font = null;
 	
+    public TrueTypeFont titleTTFont;
     public TrueTypeFont slicFont;
 	private TrueTypeFont activeSlicFont;
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		int button_x = 20, button_y = 80;
-		new_game = new Button("New Game", button_x, button_y, 120, 20);
-		about = new Button("About", button_x, button_y + 65, 120, 20);
-		exit = new Button("Exit", button_x, button_y + 120, 60, 20);
+		int button_x = 20, button_y = 140;
+		new_game = new Button("Новая игра", button_x, button_y);
+		about = new Button("Об авторе", button_x, button_y + 40);
+		exit = new Button("Выход", button_x, button_y + 80);
 		
-		Image snow = new Image("textures/main_menu/snow.png");
-		newgame_snowhat = snow.getScaledCopy(1.15f);
-		about_snowhat = snow.getScaledCopy(0.9f);
-		exit_snowhat = snow.getScaledCopy(0.7f);
+		title_snowhat = new Image("textures/main_menu/snow4.png").getScaledCopy(0.6f);
 		starsky = new Image("textures/main_menu/stars.png").getScaledCopy(0.35f);
-		moon = new Image("textures/main_menu/moon.png").getScaledCopy(0.5f);
-		
+		moon = new Image("textures/main_menu/moon.png").getScaledCopy(0.2f);
+		background = new Image("textures/main_menu/background.png");
+
 		btnSound = new Sound("res/sounds/mparsons99__snow-crunch.ogg");
-		bgmusic = new Music("res/music/chaykovskiy.ogg");
-		bgmusic.play();
+		bgmusic = new Music("res/music/chaykovskiy.ogg");//37.5
+		//bgmusic.play();
 		
 		try {
-			cool_font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/10447.ttf")).deriveFont(24f);
-			active_cool_font = cool_font.deriveFont(28f);
+			title_font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/BighausTitulBrkHll.ttf")).deriveFont(34f);
+			titleTTFont = new TrueTypeFont(title_font, true); 
+			
+			cool_font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/10447.ttf")).deriveFont(22f);
+			active_cool_font = cool_font.deriveFont(26f);
 			
 			slicFont = new TrueTypeFont(cool_font, true,("йцукенгшщзхъфывапролджэячсмитьбюё".toUpperCase()+"йцукенгшщзхъфывапролджэячсмитьбюё").toCharArray());
 			activeSlicFont = new TrueTypeFont(active_cool_font, true,
@@ -78,48 +81,49 @@ public class MainMenu extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		setCharset_Russian(g);
-		starsky.draw(240, 50);
-		moon.draw(container.getWidth() - 200, 0);
+		background.draw();
+		//starsky.draw(240, 80);
+		moon.draw(container.getWidth() - 240, -40);
 		
-
+		g.setFont(titleTTFont);
+		g.setColor(Color.white);
+		g.drawString("Frozen Heart", 20, 70);
+		g.drawImage(title_snowhat, -10, -30);
+		
 		if (selected == 1) {
 			g.setFont(activeSlicFont);
-			g.setColor(Color.cyan);
+			g.setColor(Color.yellow);
 		}
 		else {
 			g.setFont(slicFont);
 			g.setColor(Color.white);
 		}
 		new_game.draw(g);
-		g.drawImage(newgame_snowhat, new_game.x-10, new_game.y - 45);
 		
 		if (selected == 2) {
 			g.setFont(activeSlicFont);
-			g.setColor(Color.cyan);
+			g.setColor(Color.yellow);
 		}
 		else {
 			g.setFont(slicFont);
 			g.setColor(Color.white);
 		}
 		about.draw(g);
-		g.drawImage(about_snowhat, about.x-15, about.y - 35);
 		
 		if (selected == 3) {
 			g.setFont(activeSlicFont);
-			g.setColor(Color.cyan);
+			g.setColor(Color.yellow);
 		}
 		else {
 			g.setFont(slicFont);
 			g.setColor(Color.white);
 		}
 		exit.draw(g);
-		g.drawImage(exit_snowhat, exit.x-17, exit.y - 25);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		// TODO Auto-generated method stub
-		
+
 	}
 	
 	@Override
@@ -134,17 +138,19 @@ public class MainMenu extends BasicGameState {
 		if(selected != previousSelectedItem) btnSound.play(1, 0.3f);
 	}
 	
+	int mouse_x;
+	int mouse_y;
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 
-		if(new_game.hitbox.contains(x, y))
+		if(new_game.hitbox.includes(x, y))
 			//новая игра
-		if(about.hitbox.contains(x, y))
+		if(about.hitbox.includes(x, y))
 			//об авторе
-		if(exit.hitbox.contains(x, y)) 
-			//выход
-			System.exit(0);
+		if(exit.hitbox.contains(x, y)) System.exit(0);
+		mouse_x = x;
+		mouse_y = y;
 	}
 	
 	@Override
@@ -165,12 +171,12 @@ public class MainMenu extends BasicGameState {
 			case 2:
 				//это для "about"
 				break;
-			case 4:
+			case 3:
 				//выход
 				System.exit(0);
 				break;
 			}
-		}
+		}		
 	}
 	
 	/**проверяет, установлен ли русский шрифт, и если это не так, устанавливает его*/

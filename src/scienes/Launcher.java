@@ -25,7 +25,7 @@ public class Launcher extends StateBasedGame{
 			try {
 				apploader = new AppGameContainer(new Launcher("Frozen Heart"));
 				apploader.setDisplayMode(640, 480, false);
-				apploader.setTargetFrameRate(30);
+				//apploader.setTargetFrameRate(30);
 				apploader.start();
 			} catch (SlickException e1) {
 				System.out.println("Ошибка движка Slick2D. Попробуйте обновить драйверы видеокарты,"

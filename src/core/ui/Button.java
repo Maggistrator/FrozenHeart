@@ -87,4 +87,9 @@ public class Button {
 	public void setCurrent_align(int current_align) {
 		this.current_align = current_align;
 	}
+
+	public boolean mouseClicked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
