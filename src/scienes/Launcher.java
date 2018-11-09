@@ -5,9 +5,16 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import scienes.playable.Sciene1;
+import scienes.transfer.About;
+import scienes.transfer.Load;
+
 public class Launcher extends StateBasedGame{
 	
 	public static final int MENU = 0;
+	public static final int LOAD = 1;
+	public static final int ABOUT = 2;
+	public static final int SCIENE_1 = 3;
 
 		public Launcher(String name) {
 		super(name);
@@ -17,6 +24,9 @@ public class Launcher extends StateBasedGame{
 		@Override
 		public void initStatesList(GameContainer container) throws SlickException {
 			addState(new MainMenu());
+			addState(new Load());
+			addState(new About());
+			addState(new Sciene1());
 			enterState(MENU);
 		}
 

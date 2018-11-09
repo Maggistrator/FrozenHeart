@@ -49,6 +49,7 @@ public class MainMenu extends BasicGameState {
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
+		this.game = game;
 		int button_x = 20, button_y = 140;
 		new_game = new Button("Новая игра", button_x, button_y);
 		about = new Button("Об авторе", button_x, button_y + 40);
@@ -63,6 +64,7 @@ public class MainMenu extends BasicGameState {
 		bgmusic = new Music("res/music/chaykovskiy.ogg");//37.5
 		//bgmusic.play();
 		
+		//подключаем шрифты
 		try {
 			title_font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/BighausTitulBrkHll.ttf")).deriveFont(34f);
 			titleTTFont = new TrueTypeFont(title_font, true); 
@@ -71,8 +73,7 @@ public class MainMenu extends BasicGameState {
 			active_cool_font = cool_font.deriveFont(26f);
 			
 			slicFont = new TrueTypeFont(cool_font, true,("йцукенгшщзхъфывапролджэячсмитьбюё".toUpperCase()+"йцукенгшщзхъфывапролджэячсмитьбюё").toCharArray());
-			activeSlicFont = new TrueTypeFont(active_cool_font, true,
-					("йцукенгшщзхъфывапролджэячсмитьбюё".toUpperCase()+"йцукенгшщзхъфывапролджэячсмитьбюё").toCharArray());
+			activeSlicFont = new TrueTypeFont(active_cool_font, true, ("йцукенгшщзхъфывапролджэячсмитьбюё".toUpperCase()+"йцукенгшщзхъфывапролджэячсмитьбюё").toCharArray());
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
@@ -82,7 +83,6 @@ public class MainMenu extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		setCharset_Russian(g);
 		background.draw();
-		//starsky.draw(240, 80);
 		moon.draw(container.getWidth() - 240, -40);
 		
 		g.setFont(titleTTFont);
@@ -137,20 +137,21 @@ public class MainMenu extends BasicGameState {
 		
 		if(selected != previousSelectedItem) btnSound.play(1, 0.3f);
 	}
-	
-	int mouse_x;
-	int mouse_y;
+
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
-
-		if(new_game.hitbox.includes(x, y))
-			//новая игра
-		if(about.hitbox.includes(x, y))
-			//об авторе
-		if(exit.hitbox.contains(x, y)) System.exit(0);
-		mouse_x = x;
-		mouse_y = y;
+		if (new_game.hitbox.contains(x, y)) {
+			game.enterState(Launcher.SCIENE_1);
+		}
+		// новая игра
+		if (about.hitbox.contains(x, y)) {
+			game.enterState(Launcher.ABOUT);
+		}
+		// об авторе
+		if (exit.hitbox.contains(x, y)) {
+			System.exit(0);
+		}
 	}
 	
 	@Override
