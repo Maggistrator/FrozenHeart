@@ -167,10 +167,10 @@ public class MainMenu extends BasicGameState {
 		if (key == Input.KEY_ENTER) {
 			switch (selected) {
 			case 1:
-				//"начать игру"
+				game.enterState(Launcher.SCIENE_1);
 				break;
 			case 2:
-				//это для "about"
+				game.enterState(Launcher.ABOUT);
 				break;
 			case 3:
 				//выход

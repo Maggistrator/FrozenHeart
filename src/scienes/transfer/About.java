@@ -58,7 +58,7 @@ public class About extends BasicGameState {
 		g.drawString("Жанр: Shoot 'em up", 10, 30);
 		g.drawString("Дата начала разработки: 20 октября 2018 года", 10, 50);
 		g.drawString("Движок: Slick2D (Java)", 10, 70);
-		g.drawString("Сделано для \"Shoot 'em up\" Табунский Конкурс Игростроения", 10, 90);
+		g.drawString("Сделано на \"Shoot 'em up\" Табунский Конкурс Игростроения", 10, 90);
 		
 		if(active) g.setFont(activeSlicFont);
 		else g.setFont(slicFont);
