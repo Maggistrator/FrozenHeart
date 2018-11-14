@@ -1,11 +1,11 @@
 package core.ui;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
-
 import core.TrueTypeFont;
 
-public class Button {
+public class Button{
 	/**включает отрисовку активных границ*/
 	public boolean DEBUG = false;
 	/**выравнивание текста по левому краю*/
@@ -14,6 +14,7 @@ public class Button {
 	public static final int CENTER = 1;
 	
 	public String text;
+	public Image cover = null;
 	public int x = 0, y = 0;
 	public int width = 0, height = 0;
 	
@@ -24,6 +25,7 @@ public class Button {
 	private int current_align = LEFT;
 	
 	public Button(String text, int x, int y) {
+		super();
 		this.x = x;
 		this.y = y;
 		this.text = text;
@@ -44,7 +46,9 @@ public class Button {
 	public void draw(Graphics g) {
 		if(this.g==null) this.g = g;
 		if(font == null) font = (TrueTypeFont) g.getFont();
-
+		
+		if(cover != null) cover.draw();
+		
 		if(width == 0 || height == 0) {
 			width = font.getWidth(text);
 			width += width * 0.05f;
@@ -86,5 +90,18 @@ public class Button {
 	
 	public void setCurrent_align(int current_align) {
 		this.current_align = current_align;
+	}
+	
+	public void setCover(Image cover) {
+		this.cover = cover.getScaledCopy(width, height);
+	}
+
+	public void removeCover(){
+		cover = null;
+	}
+	
+	public boolean mouseClicked() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

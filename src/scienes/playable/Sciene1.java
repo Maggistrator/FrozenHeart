@@ -1,4 +1,4 @@
-package proto;
+package scienes.playable;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -6,36 +6,35 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import core.ui.Button;
 import scienes.Launcher;
 
-public class SimpleSciene extends BasicGameState {
-
-	boolean gameover = false;
-	Button button;
+public class Sciene1 extends BasicGameState {
+	int timer = 0;
 	
-	public SimpleSciene() {
-	}
-
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		button = new Button("", 12, 13);
+
 	}
 
+	String text = "Exai nahoi";
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+		g.drawString(text, 12, 120);
 
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		
-		if(gameover) game.enterState(Launcher.MENU);//переход в state с номером 0 (константа)
+		timer++;
+		if(timer == 1000)text = "sasi";
+		if(timer == 1500) game.enterState(Launcher.MENU);
 	}
 
 	@Override
 	public int getID() {
-		return 0;
+		// TODO Auto-generated method stub
+		return 3;
 	}
+	
 
 }
