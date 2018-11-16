@@ -2,37 +2,49 @@ package scienes.playable;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import entity.horse.StarlightGlimmer;
+import it.marteEngine.World;
 import scienes.Launcher;
 
-public class Sciene1 extends BasicGameState {
-	int timer = 0;
+public class Sciene1 extends World {
+	public Sciene1(int id) {
+		super(id);
+	}
+
+	StarlightGlimmer player;
+	
+	@Override
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+		super.enter(container, game);
+		this.container = container;
+		container.setTargetFrameRate(90);
+		container.setShowFPS(true);
+	}
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-
+		player = new StarlightGlimmer(0, 300);
+		add(player, GAME);
 	}
 
-	String text = "Exai nahoi";
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		g.drawString(text, 12, 120);
-
+		player.render(container, g);
+		g.drawString("Press ESC to exit to main menu", 0, 460);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		timer++;
-		if(timer == 1000)text = "sasi";
-		if(timer == 1500) game.enterState(Launcher.MENU);
+		if(container.getInput().isKeyPressed(Input.KEY_ESCAPE)) game.enterState(Launcher.MENU);
+		player.update(container, delta);
 	}
 
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
 		return 3;
 	}
 	

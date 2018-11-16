@@ -1,4 +1,4 @@
-package enemy;
+package entity.enemy;
 
 import java.util.Random;
 

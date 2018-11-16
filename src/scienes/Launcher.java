@@ -26,7 +26,7 @@ public class Launcher extends StateBasedGame{
 			addState(new MainMenu());
 			addState(new Load());
 			addState(new About());
-			addState(new Sciene1());
+			addState(new Sciene1(3));
 			enterState(MENU);
 		}
 
@@ -34,7 +34,7 @@ public class Launcher extends StateBasedGame{
 			AppGameContainer apploader;
 			try {
 				apploader = new AppGameContainer(new Launcher("Frozen Heart"));
-				apploader.setDisplayMode(640, 480, true);
+				apploader.setDisplayMode(640, 480, false);
 				//apploader.setTargetFrameRate(30);
 				apploader.start();
 			} catch (SlickException e1) {
