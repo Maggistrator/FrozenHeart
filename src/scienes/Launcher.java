@@ -5,7 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import scienes.playable.Sciene1;
+import scienes.playable.FirstLocation;
 import scienes.transfer.About;
 import scienes.transfer.Load;
 
@@ -26,7 +26,7 @@ public class Launcher extends StateBasedGame{
 			addState(new MainMenu());
 			addState(new Load());
 			addState(new About());
-			addState(new Sciene1(3));
+			addState(new FirstLocation(3));
 			enterState(MENU);
 		}
 

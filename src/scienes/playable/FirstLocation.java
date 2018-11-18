@@ -2,6 +2,7 @@ package scienes.playable;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -10,35 +11,41 @@ import entity.horse.StarlightGlimmer;
 import it.marteEngine.World;
 import scienes.Launcher;
 
-public class Sciene1 extends World {
-	public Sciene1(int id) {
+public class FirstLocation extends World {
+	public FirstLocation(int id) {
 		super(id);
 	}
 
 	StarlightGlimmer player;
+	Image background;
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
 		super.enter(container, game);
 		this.container = container;
+		background = new Image("textures/locations/test.png");
 		container.setTargetFrameRate(90);
 		container.setShowFPS(true);
 	}
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
+		super.init(container, game);
 		player = new StarlightGlimmer(0, 300);
 		add(player, GAME);
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+		super.render(container, game, g);
+		background.draw();
 		player.render(container, g);
 		g.drawString("Press ESC to exit to main menu", 0, 460);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+		super.update(container, game, delta);
 		if(container.getInput().isKeyPressed(Input.KEY_ESCAPE)) game.enterState(Launcher.MENU);
 		player.update(container, delta);
 	}
