@@ -24,26 +24,19 @@ public class MovingAreaCamera {
 		this.bounds = bounds;
 		this.width = width;
 		this.height = height;
-		System.out.println(x);
-		System.out.println(y);
-		System.out.println(width);
-		System.out.println(height);
 	}
 	
 	public void draw(Graphics g) {
 			g.translate(-x, 0);
-			System.out.println("translate!");
 	}
 	
 	public void update(GameContainer container) {
 		if(toFollow.x > (x + container.getWidth()/2) && toFollow.x < bounds.getWidth()) {
 			end_x = toFollow.x;
-			System.out.println("x changed, endx = " + end_x);
 		}
 		if(end_x > x) {
 			float deltaX = end_x - x;
 			x += deltaX * speed;
-			System.out.println("newx generated: " + x);
 		}
 	}
 }
