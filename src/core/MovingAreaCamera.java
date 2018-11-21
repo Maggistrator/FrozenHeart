@@ -38,5 +38,6 @@ public class MovingAreaCamera {
 			float deltaX = end_x - x;
 			x += deltaX * speed;
 		}
+		if(toFollow.x < x) end_x = x;
 	}
 }
