@@ -75,7 +75,7 @@ public class TrueTypeFont implements org.newdawn.slick.Font {
       /** Character's height */
       public int height;
 
-      /** Character's stored x position */
+      /** Character's stored new_x position */
       public int storedX;
 
       /** Character's stored y position */
@@ -254,19 +254,19 @@ public class TrueTypeFont implements org.newdawn.slick.Font {
     * Draw a textured quad
     * 
     * @param drawX
-    *            The left x position to draw to
+    *            The left new_x position to draw to
     * @param drawY
     *            The top y position to draw to
     * @param drawX2
-    *            The right x position to draw to
+    *            The right new_x position to draw to
     * @param drawY2
     *            The bottom y position to draw to
     * @param srcX
-    *            The left source x position to draw from
+    *            The left source new_x position to draw from
     * @param srcY
     *            The top source y position to draw from
     * @param srcX2
-    *            The right source x position to draw from
+    *            The right source new_x position to draw from
     * @param srcY2
     *            The bottom source y position to draw from
     */
@@ -347,8 +347,8 @@ public class TrueTypeFont implements org.newdawn.slick.Font {
    /**
     * Draw a string
     * 
-    * @param x
-    *            The x position to draw the string
+    * @param new_x
+    *            The new_x position to draw the string
     * @param y
     *            The y position to draw the string
     * @param whatchars
@@ -488,8 +488,8 @@ public class TrueTypeFont implements org.newdawn.slick.Font {
    /**
     * Draw a string
     * 
-    * @param x
-    *            The x position to draw the string
+    * @param new_x
+    *            The new_x position to draw the string
     * @param y
     *            The y position to draw the string
     * @param whatchars

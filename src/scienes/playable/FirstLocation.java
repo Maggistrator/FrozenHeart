@@ -9,17 +9,17 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 import core.MovingAreaCamera;
+import core.ui.GameUI;
 import entity.horse.StarlightGlimmer;
 import it.marteEngine.World;
 import scienes.Launcher;
 
 public class FirstLocation extends World {
-	public FirstLocation(int id) {
-		super(id);
-	}
 
 	StarlightGlimmer player;
 	MovingAreaCamera  camera;
+	GameUI ui;
+	
 	Image background;
 	
 	@Override
@@ -36,6 +36,7 @@ public class FirstLocation extends World {
 		player = new StarlightGlimmer(0, 300);
 		background = new Image("textures/locations/test.png");
 		camera = new MovingAreaCamera(player, new Rectangle(0, 0, 1024, 480), 320, 480);
+		ui = new GameUI(container);
 		add(player, GAME);
 	}
 
@@ -60,5 +61,7 @@ public class FirstLocation extends World {
 		return 3;
 	}
 	
-
+	public FirstLocation(int id) {
+		super(id);
+	}
 }

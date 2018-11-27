@@ -31,7 +31,7 @@ public abstract class Monster extends Entity{
 		boolean isEndXNegative = end_x < 0 ? true : false;		
 		boolean isEndYNegative = end_y < 0 ? true : false;
 		
-		//если x > конечная x, и они оба отрицательны, или оба неотрицательны, то движемся слева направо
+		//если new_x > конечная new_x, и они оба отрицательны, или оба неотрицательны, то движемся слева направо
 		if(Math.abs(x) < Math.abs(end_x) && ((isEndXNegative && isXNegative) || !(isXNegative && isEndXNegative)))  
 		{
 			speed.x  =0;
