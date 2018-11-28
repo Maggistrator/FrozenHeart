@@ -1,9 +1,8 @@
-package core.ui;
+package core;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
-import core.TrueTypeFont;
 
 public class Button{
 	/**включает отрисовку активных границ*/

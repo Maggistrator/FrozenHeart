@@ -10,8 +10,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import core.MovingAreaCamera;
 import core.ui.GameUI;
-import entity.horse.StarlightGlimmer;
 import it.marteEngine.World;
+import logic.entity.StarlightGlimmer;
 import scienes.Launcher;
 
 public class FirstLocation extends World {
@@ -35,7 +35,7 @@ public class FirstLocation extends World {
 		super.init(container, game);
 		player = new StarlightGlimmer(0, 300);
 		background = new Image("textures/locations/test.png");
-		camera = new MovingAreaCamera(player, new Rectangle(0, 0, 1024, 480), 320, 480);
+		camera = new MovingAreaCamera(player, new Rectangle(0, 0, 1024, 480), container.getWidth()/3 * 2, container.getHeight());
 		ui = new GameUI(container);
 		add(player, GAME);
 	}
@@ -46,6 +46,7 @@ public class FirstLocation extends World {
 		background.draw();
 		super.render(container, game, g);
 		g.drawString("Press ESC to exit to main menu", 0, 460);
+		ui.draw(g);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package entity.enemy;
+package logic.entity.enemy;
 
 import java.util.Random;
 

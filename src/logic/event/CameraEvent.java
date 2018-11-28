@@ -1,4 +1,4 @@
-package core.event;
+package logic.event;
 
 public class CameraEvent {
 

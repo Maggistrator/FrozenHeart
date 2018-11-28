@@ -1,4 +1,4 @@
-package entity.horse;
+package logic.entity;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;

@@ -6,13 +6,15 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import core.ui.Button;
+import core.Button;
+import core.ui.GameUI;
 import scienes.Launcher;
 
 public class SimpleSciene extends BasicGameState {
 
 	boolean gameover = false;
 	Button button;
+	GameUI ui;
 	
 	public SimpleSciene() {
 	}
@@ -20,11 +22,12 @@ public class SimpleSciene extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		button = new Button("", 12, 13);
+		ui = new GameUI(container);
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-
+		ui.draw(g);
 	}
 
 	@Override

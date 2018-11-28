@@ -1,4 +1,4 @@
-package emitters;
+package logic.emitters;
 
 import java.util.Random;
 
@@ -53,7 +53,7 @@ public class SnowEmitter implements ParticleEmitter {
 
 	public void updateParticle(Particle particle, int delta) {
 		Color color = particle.getColor();
-		float size = particle.getSize();
+//		float size = particle.getSize();
 		
 		if(isIncreasingSize) deltasize+=0.01f; else deltasize -= 0.01f;
 		if(deltasize>0.07f || deltasize<-0.07f) isIncreasingSize=!isIncreasingSize;

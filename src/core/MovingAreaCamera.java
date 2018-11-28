@@ -6,8 +6,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
-import core.event.CameraEvent;
 import it.marteEngine.entity.Entity;
+import logic.event.CameraEvent;
 
 public class MovingAreaCamera extends Observable{
 	
@@ -38,7 +38,7 @@ public class MovingAreaCamera extends Observable{
 	
 	public void update(GameContainer container) {
 	    //пересечение границы зоны свободного хода устанавливает новую путевую точку
-		if(toFollow.x > (x + container.getWidth()/2) && toFollow.x < bounds.getWidth()) {
+		if(toFollow.x > (x + width) && toFollow.x < bounds.getWidth()) {
 			end_x = toFollow.x;
 		}
 		//если задана путевая точка, камера догоняет её
