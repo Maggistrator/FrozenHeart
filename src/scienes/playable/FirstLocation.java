@@ -37,6 +37,7 @@ public class FirstLocation extends World {
 		background = new Image("textures/locations/test.png");
 		camera = new MovingAreaCamera(player, new Rectangle(0, 0, 1024, 480), container.getWidth()/3 * 2, container.getHeight());
 		ui = new GameUI(container);
+		camera.addObserver(ui);
 		add(player, GAME);
 	}
 

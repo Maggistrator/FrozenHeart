@@ -49,8 +49,9 @@ public class MovingAreaCamera extends Observable{
 			if(step < 2f) end_x = x;
 			x += step;
 			//уведомляем слушателей
-			hasChanged();
+			this.setChanged();
 			notifyObservers(new CameraEvent(x, y));
+			System.out.println("observers notified");
 		}
 		//если персонаж отступил за границы экрана слева, камера останавливается
 		//(но обратно уже не возвращается!)
