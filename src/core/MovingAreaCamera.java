@@ -5,6 +5,7 @@ import java.util.Observable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import it.marteEngine.entity.Entity;
 import logic.event.CameraEvent;
@@ -13,21 +14,21 @@ public class MovingAreaCamera extends Observable{
 	
 	//----зона свободного хода----
 	public float x = 0, y = 0;
-	public int width = 0, height = 0;
+	public int rightBorder = 0, leftBorder = 0;
 	//----------------------------
 	/**коэффициент аппроксимации камеры (условная скорость)*/
 	public float speed = 0.004f;
 	/**конечные координаты - нужны, чтобы камера не "телепортировалась" к игроку, а догоняла его*/
 	float end_x = 0, end_y = 0;
 	
-	Rectangle bounds;
 	Entity toFollow;
+	private Vector2f worldBoundaries;
 	
-	public MovingAreaCamera(Entity toFollow, Rectangle bounds, int width, int height) {
+	public MovingAreaCamera(Entity toFollow, Vector2f worldBoundaries, int leftBorder, int rightBorder) {
 		this.toFollow = toFollow;
-		this.bounds = bounds;
-		this.width = width;
-		this.height = height;
+		this.rightBorder = rightBorder;
+		this.leftBorder = leftBorder;
+		this.worldBoundaries = worldBoundaries;
 	}
 
 	//сдвиг по оси new_x
@@ -37,27 +38,33 @@ public class MovingAreaCamera extends Observable{
 	}
 	
 	public void update(GameContainer container) {
-	    //пересечение границы зоны свободного хода устанавливает новую путевую точку
-		if(toFollow.x > (x + width) && toFollow.x < bounds.getWidth()) {
-			end_x = toFollow.x;
+	    //------пересечение границы зоны свободного хода устанавливает новую путевую точку-----//
+		if(toFollow.x > x + rightBorder ) {
+			end_x += toFollow.x - (x + rightBorder);
+			recalculateCoords();
 		}
-		//если задана путевая точка, камера догоняет её
-		if(end_x > x) {
-			float deltaX = end_x - x;
-			float step = deltaX * speed;
-			//слишком маленький шаг приравнивается к 0 
-			if(step < 2f) end_x = x;
-			x += step;
-			//уведомляем слушателей
-			this.setChanged();
-			notifyObservers(new CameraEvent(x, y));
-			System.out.println("observers notified");
-		}
-		//если персонаж отступил за границы экрана слева, камера останавливается
-		//(но обратно уже не возвращается!)
-		if(toFollow.x < x) end_x = x;
 		
+		if(toFollow.x < x + leftBorder) {
+			end_x += toFollow.x - (x+leftBorder);
+			recalculateCoords();
+		}
+	}
+		private void recalculateCoords() {
+		//--------вычисление новых координат--------//
+		float deltaX = end_x - x;
+		float step = deltaX * speed;
+		// слишком маленький шаг приравнивается к 0
+		if (step < 2f)
+			end_x = x;
+		x += step;
+		// уведомляем слушателей
+		this.setChanged();
+		notifyObservers(new CameraEvent(x, y));
+		System.out.println("observers notified");
 		//TODO: разбить update на отдельные методы, выполняющие по 1-й задаче
+		
+		if(x < 0) x = 0;
+		if(x > worldBoundaries.x) x = worldBoundaries.x;
 	}
 	
 }

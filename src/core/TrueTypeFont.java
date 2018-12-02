@@ -51,7 +51,7 @@ public class TrueTypeFont implements org.newdawn.slick.Font {
    /** Texture used to cache the font 0-255 characters */
    private Texture fontTexture;
 
-   /** Default font texture width */
+   /** Default font texture rightBorder */
    private int textureWidth = 512;
 
    /** Default font texture height */
@@ -65,11 +65,11 @@ public class TrueTypeFont implements org.newdawn.slick.Font {
 
    /**
     * This is a special internal class that holds our necessary information for
-    * the font characters. This includes width, height, and where the character
+    * the font characters. This includes rightBorder, height, and where the character
     * is stored on the font texture.
     */
    private class IntObject {
-      /** Character's width */
+      /** Character's rightBorder */
       public int width;
 
       /** Character's height */
@@ -292,12 +292,12 @@ public class TrueTypeFont implements org.newdawn.slick.Font {
    }
 
    /**
-    * Get the width of a given String
+    * Get the rightBorder of a given String
     * 
     * @param whatchars
-    *            The characters to get the width of
+    *            The characters to get the rightBorder of
     * 
-    * @return The width of the characters
+    * @return The rightBorder of the characters
     */
    public int getWidth(String whatchars) {
       int totalwidth = 0;
@@ -466,7 +466,7 @@ public class TrueTypeFont implements org.newdawn.slick.Font {
                      }
                      totalwidth /= -2;
                   }
-                  //if center get next lines total width/2;
+                  //if center get next lines total rightBorder/2;
                }
                else {
                   drawQuad(totalwidth, startY,

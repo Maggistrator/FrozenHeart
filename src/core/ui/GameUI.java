@@ -41,7 +41,6 @@ public class GameUI implements Observer{
 	Rectangle decore_mg;
 	
 	GameContainer container;
-	Rectangle debug;
 
 	public float x, y;
 	private int ult_charge = 0;
@@ -54,7 +53,6 @@ public class GameUI implements Observer{
 		y = INTERFACE_HEIGHT;
 		constructOutline();
 		loadImages();
-		debug = new Rectangle(x, y, INTERFACE_WIDTH, INTERFACE_HEIGHT);
 	}
 	
 	public void draw(Graphics g) {
@@ -94,7 +92,10 @@ public class GameUI implements Observer{
 	public void update(Observable o, Object arg) {
 		if(arg instanceof CameraEvent) {
 			CameraEvent cameraEvent = (CameraEvent)arg;
-			x = cameraEvent.new_x + (container.getWidth() - INTERFACE_HEIGHT)/2;
+			x = cameraEvent.new_x;
+
+//			x = (container.getWidth() - INTERFACE_WIDTH)/2;
+			updateOutline();
 		}
 	}
 	
@@ -158,6 +159,59 @@ public class GameUI implements Observer{
 		
 		hope_frame = new Rectangle(x-2, y-12, baricon_width+4, baricon_height+4);
 		power_frame = new Rectangle(x+baricon_width+circle_radius*2-2, y-baricon_height/2-2, baricon_width+4, baricon_height+4); 	
+	}
+	
+	
+	
+	private void updateOutline() {
+		final int baricon_width = 200;
+		final int circle_radius = 45;
+		final int flag_width = 45;
+		
+		//жизнь, мана, иконка персонажа
+		hope.setX(x+circle_radius);
+		icon.setX(x + baricon_width + circle_radius);
+		power.setX(x+baricon_width+circle_radius*3);
+		
+		//----------------------------Умения-------------------------------//
+		//шаровая молния
+		float fireball_x = x + baricon_width-110+circle_radius;
+		fireball.setX(fireball_x);
+		
+		//импульс
+		float impulse_x = x + baricon_width-110 + flag_width+10+circle_radius;
+		impulse.setX(impulse_x);
+		
+		//телекинетическое поле
+		float shield_x = x + baricon_width + circle_radius*3 + flag_width + 20;
+		shield.setX(shield_x);		
+		
+		//телепорт
+		float teleport_x = x + baricon_width + circle_radius*3 + 10;
+		teleport.setX(teleport_x);
+		
+		//заряд "хаотического диссонанса"
+		float ult_x = icon.getX()+circle_radius-20;
+		ult_charge_outline.setX(ult_x);
+		
+		//-------------------декорирующие элементы------------------//
+		//..сердечко для хп...
+		float decorehp_x = icon.getX() - 15;
+		decore_hp.setX(decorehp_x);
+		
+		//...молния для маны..
+		float decoremg_x = icon.getX()+circle_radius*2 - 15;
+		decore_mg.setX(decoremg_x);
+		
+		//...ветки и новогодние украшения в правом верхнем углу
+		float decoretop_x = icon.getX();
+		decore_top.setX(decoretop_x);
+		
+		float decorebottom_x = icon.getX()+circle_radius*3/2 - 10;
+		decore_bottom.setX(decorebottom_x);
+		
+		hope_frame .setX(x-2+circle_radius);
+		power_frame.setX(x+baricon_width+circle_radius*3-2); 	
 	}
 	
 	

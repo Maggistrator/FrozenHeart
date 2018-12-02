@@ -6,6 +6,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 
 import core.MovingAreaCamera;
@@ -21,6 +22,7 @@ public class FirstLocation extends World {
 	GameUI ui;
 	
 	Image background;
+	Image background2;
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
@@ -35,7 +37,8 @@ public class FirstLocation extends World {
 		super.init(container, game);
 		player = new StarlightGlimmer(0, 300);
 		background = new Image("textures/locations/test.png");
-		camera = new MovingAreaCamera(player, new Rectangle(0, 0, 1024, 480), container.getWidth()/3 * 2, container.getHeight());
+		background2 = new Image("textures/locations/test.png");
+		camera = new MovingAreaCamera(player, new Vector2f(1280, 480), container.getWidth()/5, container.getWidth()/3);
 		ui = new GameUI(container);
 		camera.addObserver(ui);
 		add(player, GAME);
@@ -45,6 +48,7 @@ public class FirstLocation extends World {
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		camera.draw(g);
 		background.draw();
+		background2.draw(640,0);
 		super.render(container, game, g);
 		g.drawString("Press ESC to exit to main menu", 0, 460);
 		ui.draw(g);
