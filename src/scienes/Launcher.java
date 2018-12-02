@@ -22,7 +22,7 @@ public class Launcher extends StateBasedGame{
 		public void initStatesList(GameContainer container) throws SlickException {
 			addState(new MainMenu());
 			addState(new About());
-			addState(new FirstLocation(3));
+			addState(new FirstLocation(SCIENE_1));
 			enterState(MENU);
 		}
 

@@ -13,6 +13,8 @@ import core.MovingAreaCamera;
 import core.ui.GameUI;
 import it.marteEngine.World;
 import logic.entity.StarlightGlimmer;
+import logic.event.CameraEvent;
+import logic.event.PlayerEvent;
 import scienes.Launcher;
 
 public class FirstLocation extends World {
@@ -41,6 +43,7 @@ public class FirstLocation extends World {
 		camera = new MovingAreaCamera(player, new Vector2f(1280, 480), container.getWidth()/5, container.getWidth()/3);
 		ui = new GameUI(container);
 		camera.addObserver(ui);
+		player.addObserver(ui);
 		add(player, GAME);
 	}
 
@@ -49,8 +52,8 @@ public class FirstLocation extends World {
 		camera.draw(g);
 		background.draw();
 		background2.draw(640,0);
+		g.drawString("Press ESC to exit to main menu", camera.x, 460);
 		super.render(container, game, g);
-		g.drawString("Press ESC to exit to main menu", 0, 460);
 		ui.draw(g);
 	}
 
@@ -58,13 +61,14 @@ public class FirstLocation extends World {
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		super.update(container, game, delta);
 		if(container.getInput().isKeyPressed(Input.KEY_ESCAPE)) game.enterState(Launcher.MENU);
-		player.update(container, delta);
+
 		camera.update(container);
+		ui.update(camera, new CameraEvent(camera.x, camera.y));
 	}
 
 	@Override
 	public int getID() {
-		return 3;
+		return this.id;
 	}
 	
 	public FirstLocation(int id) {

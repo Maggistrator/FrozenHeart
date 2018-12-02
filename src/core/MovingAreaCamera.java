@@ -4,7 +4,6 @@ import java.util.Observable;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import it.marteEngine.entity.Entity;
@@ -57,14 +56,14 @@ public class MovingAreaCamera extends Observable{
 		if (step < 2f)
 			end_x = x;
 		x += step;
-		// уведомляем слушателей
-		this.setChanged();
-		notifyObservers(new CameraEvent(x, y));
-		System.out.println("observers notified");
-		//TODO: разбить update на отдельные методы, выполняющие по 1-й задаче
 		
 		if(x < 0) x = 0;
 		if(x > worldBoundaries.x) x = worldBoundaries.x;
+		
+		// уведомляем слушателей
+		//this.setChanged();
+		notifyObservers(new CameraEvent(x, y));
+		//TODO: разбить update на отдельные методы, выполняющие по 1-й задаче
 	}
 	
 }
