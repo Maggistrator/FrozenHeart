@@ -23,8 +23,12 @@ public class GameUI implements Observer {
 	Image heart_icon;
 	Image lightning_icon;
 	Image shield_icon;
+	Image fireball_icon;
+	Image impuls_icon;
+	Image teleport_icon;
 	Image hope_icon;
 	Image power_icon;
+	Image flower_icon;
 	Image ultcharge_icon;
 
 	Ellipse icon;
@@ -66,6 +70,8 @@ public class GameUI implements Observer {
 	public void draw(Graphics g) {
 		if (this.g == null)
 			this.g = g;
+
+		g.setAntiAlias(true);
 		
 		g.setColor(Color.black);
 		g.draw(icon);
@@ -83,9 +89,9 @@ public class GameUI implements Observer {
 		
 		g.texture(icon, ult, true);
 		g.texture(shield, shield_icon, true);	
-		g.texture(fireball, shield_icon, true);	
-		g.texture(impulse, shield_icon, true);	
-		g.texture(teleport, shield_icon, true);		
+		g.texture(fireball, fireball_icon, true);	
+		g.texture(impulse, impuls_icon, true);	
+		g.texture(teleport, teleport_icon, true);		
 		g.texture(ult_charge_outline, ultcharge_icon, true);	
 		
 //		g.setColor(Color.black);
@@ -98,7 +104,7 @@ public class GameUI implements Observer {
 
 
 		//g.draw(decore_top);
-		//g.draw(decore_bottom);		
+				
 		g.setColor(Color.black);	
 
 		g.draw(ult_charge_frame);
@@ -112,6 +118,7 @@ public class GameUI implements Observer {
 
 		g.texture(decore_hp, heart_icon, true);
 		g.texture(decore_mg, lightning_icon, true);
+		//g.texture(decore_bottom, flower_icon, true);
 		
 	}
 
@@ -203,8 +210,10 @@ public class GameUI implements Observer {
 		float decoretop_y = y - circle_radius - 5;
 		decore_top = new Rectangle(decoretop_x, decoretop_y, circle_radius, circle_radius);
 
-		float decorebottom_x = icon.getX() + circle_radius * 3 / 2 - 10;
-		float decorebottom_y = y - circle_radius - 5 + circle_radius * 3 / 2;
+//		float decorebottom_x = icon.getX() + circle_radius * 3 / 2 - 10;
+//		float decorebottom_y = y - circle_radius - 5 + circle_radius * 3 / 2;
+		float decorebottom_x = ult_x + ult_charge_outline.getWidth()/3*2;
+		float decorebottom_y = ult_y - ult_charge_outline.getHeight()/2;
 		decore_bottom = new Rectangle(decorebottom_x, decorebottom_y, circle_radius * 2 / 3, circle_radius * 2 / 3);
 
 		hope_frame = new Rectangle(x - 2, y - 12, baricon_width + 4, baricon_height + 4);
@@ -257,7 +266,8 @@ public class GameUI implements Observer {
 		float decoretop_x = icon.getX();
 		decore_top.setX(decoretop_x);
 
-		float decorebottom_x = icon.getX() + circle_radius * 3 / 2 - 10;
+//		float decorebottom_x = icon.getX() + circle_radius * 3 / 2 - 10;
+		float decorebottom_x = ult_x + ult_charge_outline.getWidth()/2;
 		decore_bottom.setX(decorebottom_x);
 
 		hope_frame.setX(x - 2);
@@ -269,9 +279,13 @@ public class GameUI implements Observer {
 		heart_icon = new Image("textures/ui/heart_icon.png");
 		lightning_icon = new Image("textures/ui/lightning_icon.png");
 		shield_icon = new Image("textures/ui/shield.png");
+		fireball_icon = new Image("textures/ui/fireball flag .png");
+		impuls_icon = new Image("textures/ui/impuls flag .png");
+		teleport_icon = new Image("textures/ui/teleport.png");
 		hope_icon = new Image("textures/ui/health.png");
 		power_icon = new Image("textures/ui/mana.png");
 		ultcharge_icon = new Image("textures/ui/ultcharge.png");
+		flower_icon = new Image("textures/ui/flower for pony.png");
 	}
 
 }
