@@ -5,7 +5,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -13,8 +12,6 @@ import core.MovingAreaCamera;
 import core.ui.GameUI;
 import it.marteEngine.World;
 import logic.entity.StarlightGlimmer;
-import logic.event.CameraEvent;
-import logic.event.PlayerEvent;
 import scienes.Launcher;
 
 public class FirstLocation extends World {
@@ -30,7 +27,7 @@ public class FirstLocation extends World {
 	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
 		super.enter(container, game);
 		this.container = container;
-		container.setTargetFrameRate(90);
+		container.setTargetFrameRate(60);
 		container.setShowFPS(true);
 	}
 	
@@ -41,9 +38,7 @@ public class FirstLocation extends World {
 		background = new Image("textures/locations/test.png");
 		background2 = new Image("textures/locations/test.png");
 		camera = new MovingAreaCamera(player, new Vector2f(1280, 480), container.getWidth()/5, container.getWidth()/3);
-		ui = new GameUI(container);
-		camera.addObserver(ui);
-		player.addObserver(ui);
+		ui = new GameUI(container, camera, player);
 		add(player, GAME);
 	}
 
@@ -61,9 +56,9 @@ public class FirstLocation extends World {
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		super.update(container, game, delta);
 		if(container.getInput().isKeyPressed(Input.KEY_ESCAPE)) game.enterState(Launcher.MENU);
-
+		
 		camera.update(container);
-		ui.update(camera, new CameraEvent(camera.x, camera.y));
+		ui.update(delta);
 	}
 
 	@Override

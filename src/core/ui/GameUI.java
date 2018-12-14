@@ -1,7 +1,9 @@
 package core.ui;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -10,15 +12,22 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.particles.ParticleEmitter;
+import org.newdawn.slick.particles.ParticleIO;
+import org.newdawn.slick.particles.ParticleSystem;
 
-import logic.event.CameraEvent;
-import logic.event.PlayerEvent;
+import core.MovingAreaCamera;
+import core.TrueTypeFont;
+import logic.entity.StarlightGlimmer;
 
-public class GameUI implements Observer {
+public class GameUI {
 
-	public static final int INTERFACE_WIDTH = 500;
+	//параметры интерфейса в пикселях
+	//TODO: сделать размеры интерфейса вычисляемыми
+	public static final int INTERFACE_WIDTH = 460;
 	public static final int INTERFACE_HEIGHT = 50;
 
+	//------------------Изображения---------------------------//
 	Image ult;
 	Image heart_icon;
 	Image lightning_icon;
@@ -30,82 +39,102 @@ public class GameUI implements Observer {
 	Image power_icon;
 	Image flower_icon;
 	Image ultcharge_icon;
+	Image stress_flower;
 
-	Ellipse icon;
-	Rectangle hope;
-	Rectangle power;
-	Rectangle ult_charge_outline;
+	//-------------------- Макет -----------------------------//
+	//основные элементы
+	Ellipse icon;//иконка в центре
+	Rectangle hope;//жизнь aka. надежда
+	Rectangle power;//мана aka. мощь
+	Rectangle ult_charge_outline;//уровень заряда суперспособности
+	
+	//рамки основных элементов
 	Rectangle ult_charge_frame;
-
 	Rectangle hope_frame;
 	Rectangle power_frame;
 
+	//плейсхолдеры заклинаний, не рисуются
 	Rectangle fireball;
 	Rectangle impulse;
 	Rectangle shield;
 	Rectangle teleport;
 
+	//украшательства
 	Rectangle decore_top;
 	Rectangle decore_bottom;
 	Rectangle decore_hp;
 	Rectangle decore_mg;
+	
+	//цветы стресс-поинтов
+	Rectangle[] stress;	
 
 	GameContainer container;
+	MovingAreaCamera camera;
+	StarlightGlimmer pony;
 
 	public float x, y;
 	private int ult_charge = 0;
 
 	private Graphics g;
+	private ParticleSystem powerfullSparklesEffect;
+	private ParticleSystem powerfullFogEffect;
 
-	public GameUI(GameContainer container) throws SlickException {
+	public GameUI(GameContainer container, MovingAreaCamera observable, StarlightGlimmer pony) throws SlickException {
 		this.container = container;
+		camera = observable;
+		this.pony = pony;
 		x = (container.getWidth() - INTERFACE_WIDTH) / 2;
 		y = INTERFACE_HEIGHT;
 		constructOutline();
 		loadImages();
+		setupPowerParticleSystem();
 	}
 
-	
-	Color golden = new Color(235, 169, 69);
+	TrueTypeFont kekFont;
 	public void draw(Graphics g) {
-		if (this.g == null)
+		if (this.g == null) {
 			this.g = g;
-
+			try {
+				Font font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/10447.ttf")).deriveFont(14f);
+				kekFont = new TrueTypeFont(font, true);
+			} catch (FontFormatException | IOException e) {
+				e.printStackTrace();
+			}
+		}
 		g.setAntiAlias(true);
+		//g.setFont(kekFont);
 		
+		g.setColor(Color.black);
+		//g.draw(decore_hp);
+		//g.draw(decore_mg);
 		g.setColor(Color.black);
 		g.draw(icon);
 		g.setColor(Color.white);
-		g.texture(hope, hope_icon, true);
-		g.texture(power, power_icon, true);
+		hope_icon.draw(hope.getX()-2, hope.getY(), hope.getX()+hope.getWidth(), hope.getY()+hope.getHeight(), 0, 0, hope.getWidth(), hope.getHeight());
+		power_icon.draw(power.getX()-2, power.getY(), power.getX()+power.getWidth(), power.getY()+power.getHeight(), 0, 0, power.getWidth(), power.getHeight());
 		g.setColor(Color.black);	
 		g.draw(hope_frame);
 		g.draw(power_frame);
-
-
-
-
 		g.setColor(Color.white);
 		
-		g.texture(icon, ult, true);
+		powerfullSparklesEffect.render(power.getX(), power.getY());
+		powerfullFogEffect.render(power.getX(), power.getY());
 		g.texture(shield, shield_icon, true);	
 		g.texture(fireball, fireball_icon, true);	
 		g.texture(impulse, impuls_icon, true);	
 		g.texture(teleport, teleport_icon, true);		
+		g.texture(icon, ult, true);
 		g.texture(ult_charge_outline, ultcharge_icon, true);	
-		
-//		g.setColor(Color.black);
-//		g.draw(decore_hp);
-//		g.draw(decore_mg);
-		//g.draw(fireball);
-		//g.draw(impulse);
-		//g.draw(shield);
-		//g.draw(teleport);
-
 
 		//g.draw(decore_top);
 				
-		g.setColor(Color.black);	
+		g.setColor(Color.black);
+		
+		org.newdawn.slick.Font font = g.getFont();
+		int powerLabelWidth = font.getWidth("Power");
+		
+		g.drawString("Hope", hope_frame.getX(), hope_frame.getY()- hope_frame.getHeight());
+		g.drawString("Power", power_frame.getX()+(power_frame.getWidth()-powerLabelWidth), power_frame.getY()-power_frame.getHeight());
 
 		g.draw(ult_charge_frame);
 		
@@ -119,51 +148,44 @@ public class GameUI implements Observer {
 		g.texture(decore_hp, heart_icon, true);
 		g.texture(decore_mg, lightning_icon, true);
 		//g.texture(decore_bottom, flower_icon, true);
+		for(Rectangle r: stress) g.texture(r, stress_flower, true);
 		
 	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-		if (arg instanceof CameraEvent) {
-			CameraEvent cameraEvent = (CameraEvent) arg;
-			updateOutline();//неправильная позиция!!!
-			x = cameraEvent.new_x + (container.getWidth()-INTERFACE_WIDTH)/2;
-
-//			updateOutline();   //правильная позиция!!! но она не работает!!!
-		}
-		
-		if(arg instanceof PlayerEvent) {
-			PlayerEvent eve = (PlayerEvent)arg;
-			switch (eve.type) {
-				case PlayerEvent.POWER_USED:
-					int power_used = (int)eve.obj;
-					power.setWidth(power.getWidth() - power_used*2);
-				break;
-				
-				case PlayerEvent.POWER_RECHARGED:
-					float power_recharged = (float)eve.obj;
-					power.setWidth(power_recharged*2);
-				break;
-
-				case PlayerEvent.ULT_CHARGED:
-					float ult_status = (float)eve.obj;
-					ult_charge = (int) ult_status;
-					break;
-
-			}
-		}
+	public void update(int delta) {
+			//updateOutline();//неправильная позиция!!!
+			x = camera.x + (container.getWidth()-INTERFACE_WIDTH)/2;
+			hope.setWidth(pony.hope*2);
+			hope.setX(x+Math.abs(180 - pony.hope*2));
+			updateOutline();   //правильная позиция!!! но она не работает!!!
+			powerfullSparklesEffect.update(delta);
+			powerfullFogEffect.update(delta);
 	}
 
+	private void setupPowerParticleSystem() {
+		try {
+			powerfullSparklesEffect = new ParticleSystem("textures/particles/power2.png", 500);
+			File violet = new File("res/emitters/violet sparkles.xml");
+			ParticleEmitter emitter1 = ParticleIO.loadEmitter(violet);
+			powerfullSparklesEffect.addEmitter(emitter1);
+			
+			powerfullFogEffect = new ParticleSystem("textures/particles/smoke.png", 500);
+			powerfullFogEffect.addEmitter(emitter1);
+		} catch (IOException e) {
+			System.out.println("ресурсы повреждены: отсутствует эмиттер частиц для эффекта магической силы");
+		}
+	}
+	
 	private void constructOutline() {
-		final int baricon_width = 200;
+		final int baricon_width = 180;
 		final int baricon_height = 20;
-		final int circle_radius = 45;
-		final int flag_width = 50;
-		final int flag_height = 60;
+		final int circle_radius = 40;
+		final int flag_width = 45;
+		final int flag_height = 53;
 
 		// жизнь, мана, иконка персонажа
 		hope = new Rectangle(x, y - 10, baricon_width, baricon_height);
-		icon = new Ellipse(x + baricon_width + circle_radius, y, 45, 50);
+		icon = new Ellipse(x + baricon_width + circle_radius, y, circle_radius, circle_radius);
 		power = new Rectangle(x + baricon_width + circle_radius * 2, y - baricon_height / 2, baricon_width,
 				baricon_height);
 
@@ -174,17 +196,17 @@ public class GameUI implements Observer {
 		fireball = new Rectangle(fireball_x, fireball_y, flag_width, flag_height);
 
 		// импульс
-		float impulse_x = x + baricon_width - 110 + flag_width + 10;
+		float impulse_x = x + baricon_width - 110 + flag_width;
 		float impulse_y = y + baricon_height - baricon_height / 2;
 		impulse = new Rectangle(impulse_x, impulse_y, flag_width, flag_height);
 
 		// телекинетическое поле
-		float shield_x = x + baricon_width + circle_radius * 2 + flag_width + 20;
+		float shield_x = x + baricon_width + circle_radius * 2 + flag_width;
 		float shield_y = y + baricon_height - baricon_height / 2;
 		shield = new Rectangle(shield_x, shield_y, flag_width, flag_height);
 
 		// телепорт
-		float teleport_x = x + baricon_width + circle_radius * 2 + 10;
+		float teleport_x = x + baricon_width + circle_radius * 2;
 		float teleport_y = y + baricon_height - baricon_height / 2;
 		teleport = new Rectangle(teleport_x, teleport_y, flag_width, flag_height);
 
@@ -193,7 +215,22 @@ public class GameUI implements Observer {
 		float ult_y = y + circle_radius - 5;
 		ult_charge_outline = new Rectangle(ult_x, ult_y, 40, 20);
 		ult_charge_frame = new Rectangle(ult_x, ult_y, 40, 20);
-
+		
+		//рамки "надежды" и "силы"
+		hope_frame = new Rectangle(x+2, y-10, baricon_width, baricon_height);
+		power_frame = new Rectangle(x + baricon_width + circle_radius * 2 + 2, y - baricon_height / 2,
+				baricon_width, baricon_height);
+		
+		//макеты стресс-поинтов
+		float flower_width = 25;	
+		float flower_height = 25;		
+		float flower_count = 4;
+		float stressflowers_x = x + baricon_width - flower_width * flower_count;
+		float stressflowers_y = y - flower_height - 10;
+		stress = new Rectangle[4]; 
+		for(int i = 0; i < flower_count; i++) stress[i] = new Rectangle(stressflowers_x+flower_width*i+2, stressflowers_y, flower_width, flower_height);
+		
+		
 		// -------------------декорирующие элементы------------------//
 		// ..сердечко для хп...
 		float decorehp_x = icon.getX() - 15;
@@ -216,14 +253,11 @@ public class GameUI implements Observer {
 		float decorebottom_y = ult_y - ult_charge_outline.getHeight()/2;
 		decore_bottom = new Rectangle(decorebottom_x, decorebottom_y, circle_radius * 2 / 3, circle_radius * 2 / 3);
 
-		hope_frame = new Rectangle(x - 2, y - 12, baricon_width + 4, baricon_height + 4);
-		power_frame = new Rectangle(x + baricon_width + circle_radius * 2 - 2, y - baricon_height / 2 - 2,
-				baricon_width + 4, baricon_height + 4);
 	}
 
 	private void updateOutline() {
-		final int baricon_width = 200;
-		final int circle_radius = 45;
+		final int baricon_width = 180;
+		final int circle_radius = 40;
 		final int flag_width = 45;
 
 		// жизнь, мана, иконка персонажа
@@ -237,21 +271,32 @@ public class GameUI implements Observer {
 		fireball.setX(fireball_x);
 
 		// импульс
-		float impulse_x = x + baricon_width - 110 + flag_width + 10;
+		float impulse_x = fireball_x + flag_width + 2;
 		impulse.setX(impulse_x);
 
-		// телекинетическое поле
-		float shield_x = x + baricon_width + circle_radius * 2 + flag_width + 20;
-		shield.setX(shield_x);
-
 		// телепорт
-		float teleport_x = x + baricon_width + circle_radius * 2 + 10;
+		float teleport_x = x + baricon_width + circle_radius * 2 + 20;
 		teleport.setX(teleport_x);
+
+		// телекинетическое поле
+		float shield_x = teleport.getX() + flag_width + 2;
+		shield.setX(shield_x);
 
 		// заряд "хаотического диссонанса"
 		float ult_x = icon.getX() + circle_radius - 20;
 		ult_charge_outline.setX(ult_x);
 		ult_charge_frame.setX(ult_x);
+
+		// рамки "надежды" и "энергии/силы"
+		hope_frame.setX(x);
+		power_frame.setX(x + baricon_width + circle_radius * 2 - 2);
+		
+		// макеты стресс-поинтов
+		float flower_width = 20;		
+		float flower_count = 4;
+		float stressflowers_x = x + baricon_width - flower_width * flower_count;
+		for(int i = 0; i < flower_count; i++) stress[i].setX(stressflowers_x+flower_width*i+2);
+		
 
 		// -------------------декорирующие элементы------------------//
 		// ..сердечко для хп...
@@ -269,23 +314,21 @@ public class GameUI implements Observer {
 //		float decorebottom_x = icon.getX() + circle_radius * 3 / 2 - 10;
 		float decorebottom_x = ult_x + ult_charge_outline.getWidth()/2;
 		decore_bottom.setX(decorebottom_x);
-
-		hope_frame.setX(x - 2);
-		power_frame.setX(x + baricon_width + circle_radius * 2 - 2);
 	}
 
 	private void loadImages() throws SlickException {
-		ult = new Image("textures/sprites/starlight/index.jpg");
+		ult = new Image("textures/ui/ulticon.png");
 		heart_icon = new Image("textures/ui/heart_icon.png");
 		lightning_icon = new Image("textures/ui/lightning_icon.png");
 		shield_icon = new Image("textures/ui/shield.png");
 		fireball_icon = new Image("textures/ui/fireball flag .png");
 		impuls_icon = new Image("textures/ui/impuls flag .png");
 		teleport_icon = new Image("textures/ui/teleport.png");
-		hope_icon = new Image("textures/ui/health.png");
-		power_icon = new Image("textures/ui/mana.png");
+		hope_icon = new Image("textures/ui/hope.png");
+		power_icon = new Image("textures/ui/power.png");
 		ultcharge_icon = new Image("textures/ui/ultcharge.png");
 		flower_icon = new Image("textures/ui/flower for pony.png");
+		stress_flower = new Image("textures/ui/stress flower.png");
 	}
 
 }

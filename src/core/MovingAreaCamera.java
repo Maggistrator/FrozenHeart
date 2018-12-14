@@ -1,22 +1,19 @@
 package core;
 
-import java.util.Observable;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Vector2f;
 
 import it.marteEngine.entity.Entity;
-import logic.event.CameraEvent;
 
-public class MovingAreaCamera extends Observable{
+public class MovingAreaCamera {
 	
 	//----зона свободного хода----
 	public float x = 0, y = 0;
 	public int rightBorder = 0, leftBorder = 0;
 	//----------------------------
 	/**коэффициент аппроксимации камеры (условная скорость)*/
-	public float speed = 0.004f;
+	public float speed = 0.01f;
 	/**конечные координаты - нужны, чтобы камера не "телепортировалась" к игроку, а догоняла его*/
 	float end_x = 0, end_y = 0;
 	
@@ -60,9 +57,6 @@ public class MovingAreaCamera extends Observable{
 		if(x < 0) x = 0;
 		if(x > worldBoundaries.x) x = worldBoundaries.x;
 		
-		// уведомляем слушателей
-		//this.setChanged();
-		notifyObservers(new CameraEvent(x, y));
 		//TODO: разбить update на отдельные методы, выполняющие по 1-й задаче
 	}
 	

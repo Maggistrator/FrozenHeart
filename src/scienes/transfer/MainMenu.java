@@ -1,4 +1,4 @@
-package scienes;
+package scienes.transfer;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -18,6 +18,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import core.Button;
 import core.TrueTypeFont;
+import scienes.Launcher;
 
 public class MainMenu extends BasicGameState {
 
@@ -57,7 +58,7 @@ public class MainMenu extends BasicGameState {
 		
 		title_snowhat = new Image("textures/main_menu/snow4.png").getScaledCopy(0.6f);
 		starsky = new Image("textures/main_menu/stars.png").getScaledCopy(0.35f);
-		moon = new Image("textures/main_menu/moon.png").getScaledCopy(0.2f);
+		moon = new Image("textures/main_menu/moon.png").getScaledCopy(0.3f);
 		background = new Image("textures/main_menu/background.png");
 
 		btnSound = new Sound("res/sounds/mparsons99__snow-crunch.ogg");
@@ -82,9 +83,9 @@ public class MainMenu extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		setCharset_Russian(g);
-		background.draw();
-		moon.draw(container.getWidth() - 240, -40);
-		
+		//background.draw();
+		moon.draw(container.getWidth() - 300, -80);
+		starsky.draw();
 		g.setFont(titleTTFont);
 		g.setColor(Color.white);
 		g.drawString("Frozen Heart", 20, 70);

@@ -1,8 +1,5 @@
 package logic.entity;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
@@ -12,7 +9,6 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 
 import it.marteEngine.entity.Entity;
-import logic.event.PlayerEvent;
 
 public class StarlightGlimmer extends Entity{
 	
@@ -31,9 +27,7 @@ public class StarlightGlimmer extends Entity{
 	private static final String ANIM_MOVING = "move";
 	private static final String ANIM_CALM = "calm";
 	
-	private Pony pony = new Pony();
-	
-	public float hope = 100;
+	public float hope = 90;
 	public float power = 100;
 	public float ultcharge = 0;
 
@@ -58,43 +52,26 @@ public class StarlightGlimmer extends Entity{
 		super.update(container, delta);
 		speed.x = 0;
 		speed.y = 0;
-		if(check(RIGHT)) speed.x = 1;
-		if(check(LEFT)) speed.x = -1;
-		if(check(UP)) speed.y = -1;
-		if(check(DOWN)) speed.y = 1;
+		if(check(RIGHT)) speed.x = 2;
+		if(check(LEFT)) speed.x = -2;
+		if(check(UP)) speed.y = -2;
+		if(check(DOWN)) speed.y = 2;
 		if(check(LEFT)||check(RIGHT)||check(UP)||check(DOWN)) setAnim(ANIM_MOVING);
 		else setAnim(ANIM_CALM);
 		
 		//---пример заклинания---//
 		//заклинанния следует вынести в отдельные методы, а снаряды сделать классами-сущностями
 		if(container.getInput().isKeyPressed(Input.KEY_ENTER)) {
-			power -=10;
-			pony.notifyObservers(new PlayerEvent(PlayerEvent.POWER_USED, 10));
+			hope -=10;
 		}
 		
 		if(power<100) {
 			power += 0.1f;
-			pony.notifyObservers(new PlayerEvent(PlayerEvent.POWER_RECHARGED, power));
 		}
 		
 		if(ultcharge<100) {
-			ultcharge +=0.01f;
-			pony.notifyObservers(new PlayerEvent(PlayerEvent.ULT_CHARGED, ultcharge));
+			ultcharge +=0.005f;
 		}
-	}
-	
-	
-	
-	public void addObserver(Observer o) {
-		pony.addObserver(o);
-	}
-	
-	public void deleteObserver(Observer o) {
-		pony.deleteObserver(o);
-	}
-	
-	public Observable getObservable() {
-		return pony;
 	}
 
 	private void initalizeAnimations() throws SlickException{

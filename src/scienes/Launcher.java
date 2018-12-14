@@ -7,6 +7,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import scienes.playable.FirstLocation;
 import scienes.transfer.About;
+import scienes.transfer.MainMenu;
 
 public class Launcher extends StateBasedGame{
 	
@@ -30,7 +31,9 @@ public class Launcher extends StateBasedGame{
 			AppGameContainer apploader;
 			try {
 				apploader = new AppGameContainer(new Launcher("Frozen Heart"));
-				apploader.setDisplayMode(640, 480, false);
+				apploader.setDisplayMode(800, 600, false);
+				apploader.setAlwaysRender(true);
+				apploader.setUpdateOnlyWhenVisible(true);
 				apploader.start();
 			} catch (SlickException e1) {
 				System.out.println("Ошибка движка Slick2D. Попробуйте обновить драйверы видеокарты,"

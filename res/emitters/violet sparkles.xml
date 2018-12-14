@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<emitter imageName="" name="Power">
+  <spawnInterval enabled="true" max="200.0" min="70.0"/>
+  <spawnCount enabled="true" max="3.0" min="1.0"/>
+  <initialLife enabled="true" max="1100.0" min="900.0"/>
+  <initialSize enabled="true" max="1.0" min="1.0"/>
+  <xOffset enabled="true" max="180.0" min="0.0"/>
+  <yOffset enabled="true" max="0.0" min="0.0"/>
+  <initialDistance enabled="true" max="0.0" min="0.0"/>
+  <speed enabled="true" max="1.0" min="1.0"/>
+  <length enabled="false" max="5000.0" min="5000.0"/>
+  <spread value="180.0"/>
+  <angularOffset value="0.0"/>
+  <growthFactor value="16.0"/>
+  <gravityFactor value="-0.5"/>
+  <windFactor value="0.0"/>
+  <startAlpha value="255.0"/>
+  <endAlpha value="10.0"/>
+  <color>
+    <step b="1.0" g="0.0" offset="0.0" r="0.0"/>
+    <step b="76.0" g="0.38" offset="1.0" r="0.76"/>
+  </color>
+</emitter>

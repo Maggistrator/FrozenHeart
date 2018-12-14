@@ -22,7 +22,9 @@ public class SimpleSciene extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		button = new Button("", 12, 13);
-		ui = new GameUI(container);
+		//ui = new GameUI(container, );
+	
+		//не поедет - NPE из-за UI
 	}
 
 	@Override
