@@ -31,7 +31,7 @@ public class Launcher extends StateBasedGame{
 			AppGameContainer apploader;
 			try {
 				apploader = new AppGameContainer(new Launcher("Frozen Heart"));
-				apploader.setDisplayMode(800, 600, false);
+				apploader.setDisplayMode(640, 480, false);
 				apploader.setAlwaysRender(true);
 				apploader.setUpdateOnlyWhenVisible(true);
 				apploader.start();

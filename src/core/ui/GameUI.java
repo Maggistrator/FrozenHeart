@@ -153,13 +153,19 @@ public class GameUI {
 	}
 
 	public void update(int delta) {
-			//updateOutline();//неправильная позиция!!!
 			x = camera.x + (container.getWidth()-INTERFACE_WIDTH)/2;
+			
+			int baricon_width = 180;
+			//обновление отображения "надежды" в зависимости от текущего значения поля
 			hope.setWidth(pony.hope*2);
-			hope.setX(x+Math.abs(180 - pony.hope*2));
-			updateOutline();   //правильная позиция!!! но она не работает!!!
+			hope.setX(x+Math.abs(baricon_width - pony.hope*2));
+			//обновление отображения "силы"
+			power.setWidth(pony.power*2-2);
+			power.setX(x+Math.abs(baricon_width - pony.power*2));
+			updateOutline();   
 			powerfullSparklesEffect.update(delta);
 			powerfullFogEffect.update(delta);
+			ult_charge = (int) pony.ultcharge;
 	}
 
 	private void setupPowerParticleSystem() {

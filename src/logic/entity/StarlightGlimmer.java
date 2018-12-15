@@ -28,7 +28,7 @@ public class StarlightGlimmer extends Entity{
 	private static final String ANIM_CALM = "calm";
 	
 	public float hope = 90;
-	public float power = 100;
+	public float power = 90;
 	public float ultcharge = 0;
 
 	public StarlightGlimmer(float x, float y) throws SlickException {
@@ -62,10 +62,10 @@ public class StarlightGlimmer extends Entity{
 		//---пример заклинания---//
 		//заклинанния следует вынести в отдельные методы, а снаряды сделать классами-сущностями
 		if(container.getInput().isKeyPressed(Input.KEY_ENTER)) {
-			hope -=10;
+			power -=10;
 		}
 		
-		if(power<100) {
+		if(power<90) {
 			power += 0.1f;
 		}
 		

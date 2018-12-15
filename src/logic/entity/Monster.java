@@ -10,6 +10,7 @@ import it.marteEngine.entity.Entity;
 
 public abstract class Monster extends Entity{
 	float end_x = 0, end_y = 0;
+	float hp;
 	
 	public Monster(float x, float y) {
 		super(x, y);
@@ -69,5 +70,13 @@ int delta =0;//deprec!!!!
 		this.speed.x = cocksuckingFactor > 0 ? cocksuckingFactor : Math.abs(deltaY/deltaX);
 		this.speed.y = this.speed.x > 0 ? Math.abs(deltaY/deltaX) : cocksuckingFactor; 
 		}
+
+	public void hurt(float value) {
+		hp -= value;
+	}
+	
+	public void hit(Entity target) {
+		
+	}
 	
 }
