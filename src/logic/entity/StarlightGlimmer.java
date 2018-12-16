@@ -8,7 +8,9 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 
+import it.marteEngine.World;
 import it.marteEngine.entity.Entity;
+import logic.spells.ImpactLightning;
 
 public class StarlightGlimmer extends Entity{
 	
@@ -59,12 +61,15 @@ public class StarlightGlimmer extends Entity{
 		if(check(LEFT)||check(RIGHT)||check(UP)||check(DOWN)) setAnim(ANIM_MOVING);
 		else setAnim(ANIM_CALM);
 		
-		//---пример заклинания---//
-		//заклинанния следует вынести в отдельные методы, а снаряды сделать классами-сущностями
-		if(container.getInput().isKeyPressed(Input.KEY_ENTER)) {
-			power -=10;
+		// ---пример заклинания---//
+		// заклинанния следует вынести в отдельные методы, а снаряды сделать
+		// классами-сущностями
+		if (container.getInput().isKeyPressed(Input.KEY_ENTER)) {
+			if (power > 10) {
+				power -= 10;
+				world.add(new ImpactLightning(x + width, y, x + 640, y), World.GAME);
+			}
 		}
-		
 		if(power<90) {
 			power += 0.1f;
 		}

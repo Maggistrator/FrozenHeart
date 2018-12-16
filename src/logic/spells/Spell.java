@@ -23,13 +23,13 @@ public class Spell {
 	public void cast(StarlightGlimmer caster, int x, int y) {}
 	
 	/**для AOE-заклинаний - взрывов, лучей, облаков газов и луж кислот*/
-	public void cast(StarlightGlimmer caster, Polygon area, float value) {
+	public void cast(StarlightGlimmer caster, Polygon area, int value) {
 		World world = caster.world;
 		List<Entity> entities = world.getEntities("Enemy");
 		entities.forEach((en)->{
 			if(en.intersect(area) != null) {
 				Monster monster = (Monster)en;
-				monster.hurt(value);
+				monster.getHitted(value);
 			}
 		});
 	}
