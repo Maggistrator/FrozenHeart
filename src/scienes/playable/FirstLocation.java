@@ -11,6 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import core.MovingAreaCamera;
 import core.ui.GameUI;
 import it.marteEngine.World;
+import logic.entity.EvilSnowman;
 import logic.entity.StarlightGlimmer;
 import scienes.Launcher;
 
@@ -19,6 +20,7 @@ public class FirstLocation extends World {
 	StarlightGlimmer player;
 	MovingAreaCamera  camera;
 	GameUI ui;
+	EvilSnowman snowman;
 	
 	Image background;
 	Image background2;
@@ -35,11 +37,13 @@ public class FirstLocation extends World {
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		super.init(container, game);
 		player = new StarlightGlimmer(0, 300);
+		snowman = new EvilSnowman(640, 300, player);
 		background = new Image("textures/locations/test.png");
 		background2 = new Image("textures/locations/test.png");
 		camera = new MovingAreaCamera(player, new Vector2f(1280, 480), container.getWidth()/5, container.getWidth()/3);
 		ui = new GameUI(container, camera, player);
 		add(player, GAME);
+		add(snowman, GAME);
 	}
 
 	@Override
