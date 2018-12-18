@@ -24,7 +24,7 @@ public class Launcher extends StateBasedGame{
 			addState(new MainMenu());
 			addState(new About());
 			addState(new FirstLocation(SCIENE_1));
-			enterState(MENU);
+			enterState(SCIENE_1);
 		}
 
 		public static void main(String[] args) {

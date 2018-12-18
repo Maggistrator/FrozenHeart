@@ -36,8 +36,8 @@ public class FirstLocation extends World {
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		super.init(container, game);
-		player = new StarlightGlimmer(0, 300);
-		snowman = new EvilSnowman(640, 300, player);
+		player = new StarlightGlimmer(5, 300);
+		snowman = new EvilSnowman(640, 250, player);
 		background = new Image("textures/locations/test.png");
 		background2 = new Image("textures/locations/test.png");
 		camera = new MovingAreaCamera(player, new Vector2f(1280, 480), container.getWidth()/5, container.getWidth()/3);
