@@ -8,6 +8,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 
+import core.MovingAreaCamera;
+import it.marteEngine.Camera;
 import it.marteEngine.World;
 import it.marteEngine.entity.Entity;
 import logic.spells.ImpactLightning;
@@ -28,11 +30,18 @@ public class StarlightGlimmer extends Entity{
 	//константы анимации
 	private static final String ANIM_MOVING = "move";
 	private static final String ANIM_CALM = "calm";
+
+	private static final String ATTACKING = "attack";
+	private static final String PROTECTING = "protect";
+
+	private static final String SPELL_A = "A";
+	private static final String SPELL_B = "B";
 	
 	public float hope = 90;
 	public float power = 90;
 	public float ultcharge = 0;
-
+	public String spellgroup = ATTACKING;
+			
 	public StarlightGlimmer(float x, float y) throws SlickException {
 		super(x, y);
 		//клавиши управления
@@ -41,6 +50,9 @@ public class StarlightGlimmer extends Entity{
 		define(UP, Input.KEY_W);
 		define(DOWN, Input.KEY_S);
 
+		define(ATTACKING, Input.KEY_E);
+		define(PROTECTING, Input.KEY_Q);
+		
 		setHitBox(0, 60, 80, 20);
 		speed = new Vector2f(0, 0);
 		addType(PLAYER);
@@ -64,12 +76,6 @@ public class StarlightGlimmer extends Entity{
 		// ---пример заклинания---//
 		// заклинанния следует вынести в отдельные методы, а снаряды сделать
 		// классами-сущностями
-		if (container.getInput().isKeyPressed(Input.KEY_ENTER)) {
-			if (power > 10) {
-				power -= 10;
-				world.add(new ImpactLightning(x + width, y, x + 640, y), World.GAME);
-			}
-		}
 		if(power<90) {
 			power += 0.1f;
 		}
@@ -78,7 +84,16 @@ public class StarlightGlimmer extends Entity{
 			ultcharge +=0.005f;
 		}
 	}
-
+	
+	public void castSpell(String spell, int mouseX, int mouseY) {
+		if (spell.equals(SPELL_A) && spellgroup.equals(ATTACKING)) {
+			if (power > 10) {
+				power -= 10;
+				world.add(new ImpactLightning(x + width-20, y, mouseX, mouseY), World.GAME);
+			}
+		}
+	}
+	
 	private void initalizeAnimations() throws SlickException{
 		SpriteSheet moving = new SpriteSheet(new Image("textures/sprites/starlight/starlight.png").getScaledCopy(0.4f), 120, 100);
 		Animation anim_moving = new Animation(moving, 350);
