@@ -66,6 +66,17 @@ public class FirstLocation extends World {
 	}
 
 	@Override
+	public void mousePressed(int button, int x, int y) {
+		super.mousePressed(button, x, y);
+		if(button == Input.MOUSE_LEFT_BUTTON) {
+			player.castSpell(StarlightGlimmer.SPELL_A, camera.x+x, y);
+		}
+		if(button == Input.MOUSE_RIGHT_BUTTON) {
+			player.castSpell(StarlightGlimmer.SPELL_B, camera.x+x, y);
+		}
+	}
+	
+	@Override
 	public int getID() {
 		return this.id;
 	}

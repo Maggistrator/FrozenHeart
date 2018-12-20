@@ -31,11 +31,12 @@ public class StarlightGlimmer extends Entity{
 	private static final String ANIM_MOVING = "move";
 	private static final String ANIM_CALM = "calm";
 
-	private static final String ATTACKING = "attack";
-	private static final String PROTECTING = "protect";
+	public static final String ATTACKING = "attack";
+	public static final String PROTECTING = "protect";
 
-	private static final String SPELL_A = "A";
-	private static final String SPELL_B = "B";
+	public static final String SPELL_A = "A";
+	public static final String SPELL_B = "B";
+	public static final String ULTIMATE = "destroy 'em all";	
 	
 	public float hope = 90;
 	public float power = 90;
@@ -85,7 +86,7 @@ public class StarlightGlimmer extends Entity{
 		}
 	}
 	
-	public void castSpell(String spell, int mouseX, int mouseY) {
+	public void castSpell(String spell, float mouseX, float mouseY) {
 		if (spell.equals(SPELL_A) && spellgroup.equals(ATTACKING)) {
 			if (power > 10) {
 				power -= 10;
