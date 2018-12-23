@@ -88,7 +88,7 @@ public class About extends BasicGameState {
 	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
-		if(key == Input.KEY_ENTER) game.enterState(Launcher.MENU);
+		if(key == Input.KEY_ENTER || key == Input.KEY_ESCAPE) game.enterState(Launcher.MENU);
 	}
 
 	@Override

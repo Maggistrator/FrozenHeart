@@ -20,11 +20,11 @@ public class MonsterFactory {
 		Monster monster;
 		
 		if(rand.nextBoolean()) {
-			monster = new EvilSnowman(pony.x+container.getWidth()+rand.nextInt(200), rand.nextInt(container.getHeight()), pony);		
+			monster = new EvilSnowman(pony.x+container.getWidth()+rand.nextInt(200), rand.nextInt(container.getHeight()/2)+container.getHeight()/2, pony);		
 		}
 		else {
 			//TODO: создать класс оленя
-			monster = new EvilSnowman(pony.x+container.getWidth()+rand.nextInt(200), rand.nextInt(container.getHeight()), pony); 
+			monster = new EvilSnowman(pony.x+container.getWidth()+rand.nextInt(200), rand.nextInt(container.getHeight()/2)+container.getHeight()/2, pony); 
 		}
 		return monster;
 	}

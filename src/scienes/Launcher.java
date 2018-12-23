@@ -5,6 +5,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import logic.entity.StarlightGlimmer;
+import scienes.playable.LastState;
 import scienes.playable.FirstLocation;
 import scienes.transfer.About;
 import scienes.transfer.MainMenu;
@@ -14,6 +16,7 @@ public class Launcher extends StateBasedGame{
 	public static final int MENU = 0;
 	public static final int ABOUT = 2;
 	public static final int SCIENE_1 = 3;
+	public static final int FINISH = 4;
 
 		public Launcher(String name) {
 		super(name);
@@ -21,10 +24,13 @@ public class Launcher extends StateBasedGame{
 
 		@Override
 		public void initStatesList(GameContainer container) throws SlickException {
+			StarlightGlimmer pony = new StarlightGlimmer(5, 280);
+			
 			addState(new MainMenu());
 			addState(new About());
-			addState(new FirstLocation(SCIENE_1));
-			enterState(SCIENE_1);
+			addState(new FirstLocation(SCIENE_1, pony));
+			addState(new LastState(FINISH, pony));
+			enterState(MENU);
 		}
 
 		public static void main(String[] args) {

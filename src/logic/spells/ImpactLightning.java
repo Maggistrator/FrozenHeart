@@ -1,7 +1,8 @@
 package logic.spells;
 
-import java.io.File;
 import java.io.IOException;
+
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -29,13 +30,14 @@ public class ImpactLightning extends Entity{
 	public float endx, endy;
 	public float distance = 0;
 	
-	private Monster enemy;
 	private StarlightGlimmer sender;
-	private Sound sound;
+	private Sound impactSound;
 	
 	private Rectangle get_rect  = new Rectangle(x, y, 40, 40);
-	ParticleSystem trail;
+	ParticleSystem sparkleburst;
 	private Image temp_image;
+	
+	boolean timeToBurst = false;
 	
 	public ImpactLightning(float x, float y, float newx, float newy, StarlightGlimmer sender) {
 		super(x, y);
@@ -46,35 +48,50 @@ public class ImpactLightning extends Entity{
 		calculateSpeed(ORIENTED_MOTION_SPEED, endx, endy);
 		setHitBox(0, 0, 40, 40);
 		loadAnim();
-//		loadParticles();
+		loadParticles();
 		loadSound();
-
-        sound.play(0.8f, 1f);
 	}
 	
+	Color opaqueWhite = new Color(1f, 1f, 1f, 1f); 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
+		if(timeToBurst) sparkleburst.render(x, y);
 		super.render(container, g);
-		g.texture(get_rect, temp_image, true);
+		g.setColor(opaqueWhite);
+		if(!timeToBurst) g.texture(get_rect, temp_image, true);
+		g.setColor(Color.white);
 	}
-	
+
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		super.update(container, delta);
 		Monster monster;
 		get_rect.setX(x);
 		get_rect.setY(y);
+		
+		if(timeToBurst) {
+			melt();
+			sparkleburst.update(delta);
+		}
 
-		if((monster = (Monster) collide("MONSTER", x+2, y)) != null) {
-			monster.getHitted(damage);
-			sound.stop();
-			destroy();
+		//при попадании в монстра..
+		if((monster = (Monster) collide("MONSTER", x-50, y)) != null) {
+			monster.getHitted(damage);//..отнимем ему хп
+			sender.stats.damageDealed+=damage;//добавим урон в копилку поняшки
+			speed.x = 0;
+			speed.y = 0;
+			//..взорвём к херам молнию
+			timeToBurst = true;
+			//..и сыграем победный "трунь" по этому поводу
+	        impactSound.play(0.8f, 1f);
 		}
 		
 		distance = getDistance(sender);
 		if(distance > MAX_DISTANCE) {
-			sound.stop();
-			destroy();
+			speed.x = 0.01f;
+			speed.y = 0.01f;
+			timeToBurst = true;
+			melt();
 		}
 	}
 	
@@ -93,13 +110,20 @@ public class ImpactLightning extends Entity{
 	
 	private void loadParticles() {
 		try {
-			trail = new ParticleSystem("textures/particles/trail.png", 800);
-			File emitterConfigFile = new File("res/emitters/ice_trail.xml");
-			ParticleEmitter emitter = ParticleIO.loadEmitter(emitterConfigFile);
-			trail.addEmitter(emitter);
+			sparkleburst = new ParticleSystem("textures/particles/colorable power.png", 800);
+			ParticleEmitter emitter = ParticleIO.loadEmitter("res/emitters/sparkleburst.xml");
+			sparkleburst.addEmitter(emitter);
 		} catch (IOException e) {
-			System.out.println("ресурсы повреждены: отсутствует эмиттер частиц для эффекта шлейфа шаровой молнии");
+			System.out.println("ресурсы повреждены: отсутствует эмиттер частиц для шаровой молнии");
 		}
+	}
+
+	private void melt() {
+		if (opaqueWhite.a > 0) {
+			opaqueWhite.a -= 0.025f;
+			get_rect.scaleGrow(1.001f, 1.001f);
+		}
+		if(opaqueWhite.a < 0.1f) destroy();
 	}
 	
 	private void loadAnim() {
@@ -113,7 +137,7 @@ public class ImpactLightning extends Entity{
 
 	private void loadSound() {
 		try {
-			sound = new Sound("res/sounds/103687__chimerical__melt-down-1.ogg");
+			impactSound = new Sound("res/sounds/lightning_impact.ogg");
 		} catch (SlickException e) {
 			System.err.println("вынь пальцы из розетки, электрического звука шаровой молнии не слышно (NPE)");
 		}

@@ -64,7 +64,6 @@ public class EvilSnowman extends Monster {
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		super.render(container, g);
 		g.texture(textured, image, true);
-		g.draw(textured);
 	}
 	
 	/**
@@ -112,7 +111,8 @@ public class EvilSnowman extends Monster {
 	}
 	
 	public void die() {
-		destroy();
+		pony.stats.enemiesKilled++;//засчитываем поняшке фраг
+		destroy();//умираем
 	}
 	
 	public void scheduledTask() {

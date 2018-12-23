@@ -13,6 +13,9 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.particles.ConfigurableEmitter;
+import org.newdawn.slick.particles.ParticleIO;
+import org.newdawn.slick.particles.ParticleSystem;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -44,16 +47,27 @@ public class MainMenu extends BasicGameState {
 	Font cool_font = null;
 	Font active_cool_font = null;
 	
+	ParticleSystem snow;
+	ParticleSystem flakes;
+	ParticleSystem snowcrunch;
+	
     public TrueTypeFont titleTTFont;
     public TrueTypeFont slicFont;
 	private TrueTypeFont activeSlicFont;
 
 	@Override
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+		super.enter(container, game);
+		bgmusic = new Music("res/music/chaykovskiy.ogg");
+		bgmusic.loop(1.0f, 1.0f);
+	}
+	
+	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		this.game = game;
 		int button_x = 20, button_y = 140;
 		new_game = new Button("Новая игра", button_x, button_y);
-		about = new Button("Об авторе", button_x, button_y + 40);
+		about = new Button("О проекте", button_x, button_y + 40);
 		exit = new Button("Выход", button_x, button_y + 80);
 		
 		title_snowhat = new Image("textures/main_menu/snow4.png").getScaledCopy(0.6f);
@@ -62,30 +76,18 @@ public class MainMenu extends BasicGameState {
 		background = new Image("textures/main_menu/background.png");
 
 		btnSound = new Sound("res/sounds/mparsons99__snow-crunch.ogg");
-		bgmusic = new Music("res/music/chaykovskiy.ogg");//37.5
-		//bgmusic.play();
 		
-		//подключаем шрифты
-		try {
-			title_font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/BighausTitulBrkHll.ttf")).deriveFont(34f);
-			titleTTFont = new TrueTypeFont(title_font, true); 
-			
-			cool_font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/10447.ttf")).deriveFont(22f);
-			active_cool_font = cool_font.deriveFont(26f);
-			
-			slicFont = new TrueTypeFont(cool_font, true,("йцукенгшщзхъфывапролджэячсмитьбюё".toUpperCase()+"йцукенгшщзхъфывапролджэячсмитьбюё").toCharArray());
-			activeSlicFont = new TrueTypeFont(active_cool_font, true, ("йцукенгшщзхъфывапролджэячсмитьбюё".toUpperCase()+"йцукенгшщзхъфывапролджэячсмитьбюё").toCharArray());
-		} catch (FontFormatException | IOException e) {
-			e.printStackTrace();
-		}
+		loadFonts();
+		loadEmitters();
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		setCharset_Russian(g);
-		//background.draw();
+		background.draw();
 		moon.draw(container.getWidth() - 300, -80);
 		starsky.draw();
+		
 		g.setFont(titleTTFont);
 		g.setColor(Color.white);
 		g.drawString("Frozen Heart", 20, 70);
@@ -94,6 +96,7 @@ public class MainMenu extends BasicGameState {
 		if (selected == 1) {
 			g.setFont(activeSlicFont);
 			g.setColor(Color.yellow);
+			snowcrunch.render(new_game.x, new_game.y + new_game.height);
 		}
 		else {
 			g.setFont(slicFont);
@@ -104,6 +107,7 @@ public class MainMenu extends BasicGameState {
 		if (selected == 2) {
 			g.setFont(activeSlicFont);
 			g.setColor(Color.yellow);
+			snowcrunch.render(about.x, about.y + about.height);
 		}
 		else {
 			g.setFont(slicFont);
@@ -114,17 +118,24 @@ public class MainMenu extends BasicGameState {
 		if (selected == 3) {
 			g.setFont(activeSlicFont);
 			g.setColor(Color.yellow);
+			snowcrunch.render(exit.x, exit.y + exit.height);
 		}
 		else {
 			g.setFont(slicFont);
 			g.setColor(Color.white);
 		}
 		exit.draw(g);
+		
+		snow.render();
+		flakes.render();
+		
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-
+		snow.update(delta);
+		flakes.update(delta);
+		snowcrunch.update(delta);
 	}
 	
 	@Override
@@ -132,18 +143,38 @@ public class MainMenu extends BasicGameState {
 		super.mouseMoved(oldx, oldy, newx, newy);
 		int previousSelectedItem = selected;
 		
-		if(new_game.hitbox.contains(newx, newy)) selected = 1;
-		if(about.hitbox.contains(newx, newy)) selected = 2;
-		if(exit.hitbox.contains(newx, newy)) selected = 3;
+		if(new_game.hitbox.contains(newx, newy)) {
+			selected = 1;
+			//настройка ширины эмиттера - все надписи разные
+			resetSnowcrunchWidth(); 
+		}
+		if(about.hitbox.contains(newx, newy)) {
+			selected = 2;
+			resetSnowcrunchWidth(); 
+		}
+		if(exit.hitbox.contains(newx, newy)) {
+			selected = 3;
+			resetSnowcrunchWidth(); 
+		}
 		
-		if(selected != previousSelectedItem) btnSound.play(1, 0.3f);
+		if(selected != previousSelectedItem) {
+			btnSound.play(1, 0.3f);
+			snowcrunch.reset();
+		}
+
 	}
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 		if (new_game.hitbox.contains(x, y)) {
-			game.enterState(Launcher.SCIENE_1);
+			try {
+				Sound sound = new Sound("res/sounds/aiwha__ding.ogg");
+				sound.play();
+				game.enterState(Launcher.SCIENE_1);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
 		}
 		// новая игра
 		if (about.hitbox.contains(x, y)) {
@@ -159,10 +190,14 @@ public class MainMenu extends BasicGameState {
 	public void keyPressed(int key, char c) {
 		if (key == Input.KEY_UP && selected > 1) {
 			selected--;
+			snowcrunch.reset();
+			resetSnowcrunchWidth(); 
 			btnSound.play(1, 0.3f);
 		}
 		if (key == Input.KEY_DOWN && selected < 3) {
 			selected++;
+			snowcrunch.reset();
+			resetSnowcrunchWidth(); 
 			btnSound.play(1, 0.3f);
 		}
 		if (key == Input.KEY_ENTER) {
@@ -178,13 +213,80 @@ public class MainMenu extends BasicGameState {
 				System.exit(0);
 				break;
 			}
-		}		
+		}
+	}
+	
+	@Override
+	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+		super.leave(container, game);
+		bgmusic.stop();
 	}
 	
 	/**проверяет, установлен ли русский шрифт, и если это не так, устанавливает его*/
 	private void setCharset_Russian(Graphics g) {
 		if(!g.getFont().equals(slicFont)) {
 			g.setFont(slicFont);
+		}
+	}
+
+	/**
+	 * подключаем шрифты
+	 * */
+	private void loadFonts() {
+		try {
+			title_font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/BighausTitulBrkHll.ttf")).deriveFont(34f);
+			titleTTFont = new TrueTypeFont(title_font, true); 
+			
+			cool_font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/10447.ttf")).deriveFont(22f);
+			active_cool_font = cool_font.deriveFont(26f);
+			
+			slicFont = new TrueTypeFont(cool_font, true,("йцукенгшщзхъфывапролджэячсмитьбюё".toUpperCase()+"йцукенгшщзхъфывапролджэячсмитьбюё").toCharArray());
+			activeSlicFont = new TrueTypeFont(active_cool_font, true, ("йцукенгшщзхъфывапролджэячсмитьбюё".toUpperCase()+"йцукенгшщзхъфывапролджэячсмитьбюё").toCharArray());
+		} catch (FontFormatException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * Эта волшебная функция загружает эмиттеры снежка в менюшку
+	 * */
+	private void loadEmitters() {
+		try {
+			//системы частиц
+			snow = new ParticleSystem("textures/particles/snowflake2.png");
+			flakes = new ParticleSystem("textures/particles/snowflake.png");
+			snowcrunch = new ParticleSystem("textures/particles/snowflake2.png");
+			snowcrunch.setRemoveCompletedEmitters(false);
+
+			//эмиттеры, вбрасывает IOException
+			ConfigurableEmitter snowEmitter = ParticleIO.loadEmitter("res/emitters/snow.xml");
+			ConfigurableEmitter snowCrunchEmitter = ParticleIO.loadEmitter("res/emitters/snowcrunch.xml");
+			
+			snow.addEmitter(snowEmitter);
+			flakes.addEmitter(snowEmitter);
+			snowcrunch.addEmitter(snowCrunchEmitter);
+		} catch (IOException e) {
+			System.err.println("частицы снега сожрал разработчик, чтобы схватить киберангину и не ходить на электропары");
+		}
+	}
+
+	private void resetSnowcrunchWidth() {
+		//для того, чтобы эмиттер не срабатывал без принудительного селекта
+		if(snowcrunch.getEmitter(0) == null) loadEmitters();
+		
+		ConfigurableEmitter emitter = (ConfigurableEmitter) snowcrunch.getEmitter(0);
+
+		switch (selected) {
+		case 1:
+			emitter.xOffset.setMax(new_game.width);
+			break;
+		case 2:
+			emitter.xOffset.setMax(about.width);
+			break;
+		case 3:
+			emitter.xOffset.setMax(exit.width);
+			break;
 		}
 	}
 

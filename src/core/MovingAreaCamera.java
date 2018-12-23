@@ -13,7 +13,7 @@ public class MovingAreaCamera {
 	public int rightBorder = 0, leftBorder = 0;
 	//----------------------------
 	/**коэффициент аппроксимации камеры (условная скорость)*/
-	public float speed = 0.01f;
+	public float speed = 0.05f;
 	/**конечные координаты - нужны, чтобы камера не "телепортировалась" к игроку, а догоняла его*/
 	float end_x = 0, end_y = 0;
 	

@@ -5,11 +5,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 
 import it.marteEngine.World;
 import it.marteEngine.entity.Entity;
+import logic.Statistics;
 import logic.spells.ImpactLightning;
 
 public class StarlightGlimmer extends Entity{
@@ -44,6 +46,8 @@ public class StarlightGlimmer extends Entity{
 	//служебный таймер отката следующего очка стресса
 	private int stresspointsTimer = 0;
 			
+	public Statistics stats = new Statistics();
+	
 	public StarlightGlimmer(float x, float y) throws SlickException {
 		super(x, y);
 		//клавиши управления
@@ -93,20 +97,27 @@ public class StarlightGlimmer extends Entity{
 		
 		//восстановление стресспоинтов
 		if (stresspoints < 4) {
-			if (stresspointsTimer % 300 == 0) {
+			if (stresspointsTimer % 500 == 0) {
 				stresspoints++;
 				stresspointsTimer = 0;
+				stats.stresspointsRestored++;
 			}
 			stresspointsTimer++;
 		}
 	}
 	
 	public void castSpell(String spell, float mouseX, float mouseY) {
-		if (spell.equals(SPELL_A) && spellgroup.equals(ATTACKING)) {
-			if (power > 10) {
-				power -= 10;
-				world.add(new ImpactLightning(x + width-20, y, mouseX, mouseY, this), World.GAME);
+		try {
+			if (spell.equals(SPELL_A) && spellgroup.equals(ATTACKING)) {
+				if (power > 10) {
+					power -= 10;
+					world.add(new ImpactLightning(x + width - 20, y, mouseX, mouseY, this), World.GAME);
+					Sound sound = new Sound("res/sounds/cast_lightning.ogg");
+					sound.play();
+				}
 			}
+		} catch (SlickException e) {
+			e.printStackTrace();
 		}
 	}
 	

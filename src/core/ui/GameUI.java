@@ -156,7 +156,15 @@ public class GameUI {
 		g.texture(decore_hp, heart_icon, true);
 		g.texture(decore_mg, lightning_icon, true);
 		//g.texture(decore_bottom, flower_icon, true);
-		for(int i = 1; i <= pony.stresspoints; i++) g.texture(stress[i-1], stress_flower, true);
+		for(int i = 1; i <= 4; i++) {
+			if(i <= pony.stresspoints) g.texture(stress[i-1], stress_flower, true);
+			else {
+				g.setColor(Color.black);
+				g.texture(stress[i-1], stress_flower, true);
+			}
+		}
+
+		g.setColor(Color.white);
 	}
 
 	public void update(int delta) {

@@ -23,7 +23,7 @@ public class Icicle extends Entity {
 	public final int MAX_DISTANCE = 400;
 	public float finding_range = 100;
 
-	public int damage = 5;
+	public int damage = 10;
 	public float endx, endy;
 	public float distance = 0;
 	
@@ -63,8 +63,6 @@ public class Icicle extends Entity {
 		
 		if(speed.x < 0) g.texture(get_rect, image, true);
 		else  g.texture(get_rect, flippedCopy, true);
-		
-		g.draw(get_rect);
 		
 //		----конец вращения----
 //		g.rotate(x + width/2, y+height/2, -targetAngle);

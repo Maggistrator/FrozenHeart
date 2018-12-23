@@ -3,6 +3,7 @@ package core;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 public class Button{
 	/**включает отрисовку активных границ*/
@@ -14,7 +15,8 @@ public class Button{
 	
 	public String text;
 	public Image cover = null;
-	public int x = 0, y = 0;
+	public float x = 0;
+	public float y = 0;
 	public int width = 0, height = 0;
 	
 	private TrueTypeFont font;
@@ -23,13 +25,15 @@ public class Button{
 	
 	private int current_align = LEFT;
 	
-	public Button(String text, int x, int y) {
+	private boolean selected = false;
+	
+	public Button(String text, float yesX, float yesY) {
 		super();
-		this.x = x;
-		this.y = y;
+		this.x = yesX;
+		this.y = yesY;
 		this.text = text;
 		
-		hitbox = new Rectangle(x, y, width, height);
+		hitbox = new Rectangle(yesX, yesY, width, height);
 	}
 
 	public Button(String text, int x, int y, int width, int height) {
@@ -83,6 +87,14 @@ public class Button{
 		hitbox.setLocation(x, y);
 	}
 
+	public boolean contains(float x, float y) {
+		return hitbox.contains(x, y);
+	}
+
+	public boolean contains(Shape other) {
+		return hitbox.contains(other);
+	}
+	
 	public int getCurrent_align() {
 		return current_align;
 	}
@@ -91,6 +103,14 @@ public class Button{
 		this.current_align = current_align;
 	}
 	
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
 	public void setCover(Image cover) {
 		this.cover = cover.getScaledCopy(width, height);
 	}
@@ -103,4 +123,5 @@ public class Button{
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<emitter imageName="" name="snowcrunch">
+  <spawnInterval enabled="true" max="120.0" min="10.0"/>
+  <spawnCount enabled="true" max="20.0" min="5.0"/>
+  <initialLife enabled="true" max="800.0" min="300.0"/>
+  <initialSize enabled="true" max="15.0" min="4.0"/>
+  <xOffset enabled="true" max="120.0" min="0.0"/>
+  <yOffset enabled="true" max="10.0" min="-10.0"/>
+  <initialDistance enabled="false" max="0.0" min="0.0"/>
+  <speed enabled="true" max="9.0" min="1.0"/>
+  <length enabled="true" max="400.0" min="250.0"/>
+  <spread value="270.0"/>
+  <angularOffset value="0.0"/>
+  <growthFactor value="0.0"/>
+  <gravityFactor value="3.0"/>
+  <windFactor value="0.0"/>
+  <startAlpha value="255.0"/>
+  <endAlpha value="10.0"/>
+  <color>
+    <step b="1.0" g="1.0" offset="0.0" r="1.0"/> 
+    <step b="1.0" g="0.8" offset="1.0" r="0.8"/>
+  </color>
+</emitter>
