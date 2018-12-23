@@ -1,5 +1,7 @@
 package scienes.playable;
 
+import java.util.Random;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -12,6 +14,7 @@ import core.MovingAreaCamera;
 import core.ui.GameUI;
 import it.marteEngine.World;
 import logic.entity.EvilSnowman;
+import logic.entity.MonsterFactory;
 import logic.entity.StarlightGlimmer;
 import scienes.Launcher;
 
@@ -21,6 +24,7 @@ public class FirstLocation extends World {
 	MovingAreaCamera  camera;
 	GameUI ui;
 	EvilSnowman snowman;
+	MonsterFactory factory;
 	
 	Image background;
 	Image background2;
@@ -42,6 +46,7 @@ public class FirstLocation extends World {
 		background2 = new Image("textures/locations/test.png");
 		camera = new MovingAreaCamera(player, new Vector2f(1280, 480), container.getWidth()/5, container.getWidth()/3);
 		ui = new GameUI(container, camera, player);
+		factory = new MonsterFactory(player, container);
 		add(player, GAME);
 		add(snowman, GAME);
 	}
@@ -56,13 +61,25 @@ public class FirstLocation extends World {
 		ui.draw(g);
 	}
 
+	int timer = 0;
+	int quant = 1;
+	Random rand = new Random();
+
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		super.update(container, game, delta);
 		if(container.getInput().isKeyPressed(Input.KEY_ESCAPE)) game.enterState(Launcher.MENU);
+				
+		if(timer % quant == 0) {
+			timer = 0;
+			quant = rand.nextInt(150)+100;
+			add(factory.createMonster(), GAME);
+		}
 		
 		camera.update(container);
 		ui.update(delta);
+	
+		timer++;
 	}
 
 	@Override

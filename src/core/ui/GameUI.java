@@ -10,6 +10,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.font.effects.OutlineEffect;
 import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.particles.ParticleEmitter;
@@ -17,7 +20,6 @@ import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import core.MovingAreaCamera;
-import core.TrueTypeFont;
 import logic.entity.StarlightGlimmer;
 
 public class GameUI {
@@ -67,6 +69,9 @@ public class GameUI {
 	
 	//цветы стресс-поинтов
 	Rectangle[] stress;	
+	
+	Image[] atackGroup = new Image[2];
+	Image[] defenceGroup = new Image[2];
 
 	GameContainer container;
 	MovingAreaCamera camera;
@@ -87,22 +92,16 @@ public class GameUI {
 		y = INTERFACE_HEIGHT;
 		constructOutline();
 		loadImages();
+		loadHopefont();
+		loadPowerfont();
 		setupPowerParticleSystem();
 	}
 
-	TrueTypeFont kekFont;
 	public void draw(Graphics g) {
 		if (this.g == null) {
 			this.g = g;
-			try {
-				Font font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/10447.ttf")).deriveFont(14f);
-				kekFont = new TrueTypeFont(font, true);
-			} catch (FontFormatException | IOException e) {
-				e.printStackTrace();
-			}
 		}
 		g.setAntiAlias(true);
-		//g.setFont(kekFont);
 		
 		g.setColor(Color.black);
 		//g.draw(decore_hp);
@@ -119,6 +118,9 @@ public class GameUI {
 		
 		powerfullSparklesEffect.render(power.getX(), power.getY());
 		powerfullFogEffect.render(power.getX(), power.getY());
+		
+		deactivateExtraSpellgroup();
+		
 		g.texture(shield, shield_icon, true);	
 		g.texture(fireball, fireball_icon, true);	
 		g.texture(impulse, impuls_icon, true);	
@@ -127,17 +129,23 @@ public class GameUI {
 		g.texture(ult_charge_outline, ultcharge_icon, true);	
 
 		//g.draw(decore_top);
-				
-		g.setColor(Color.black);
-		
+
+		g.setFont(hopeFont);
 		org.newdawn.slick.Font font = g.getFont();
 		int powerLabelWidth = font.getWidth("Power");
+		int hopeLabelWidth = font.getWidth("Hope");
 		
 		g.drawString("Hope", hope_frame.getX(), hope_frame.getY()- hope_frame.getHeight());
+		//g.drawString("Hope", decore_hp.getX() - hopeLabelWidth, decore_hp.getY() + g.getFont().getLineHeight()/2);
+		
+		g.setFont(powerFont);
 		g.drawString("Power", power_frame.getX()+(power_frame.getWidth()-powerLabelWidth), power_frame.getY()-power_frame.getHeight());
-
+		//g.drawString("Power", decore_mg.getX() + decore_mg.getWidth(), decore_mg.getY() + g.getFont().getLineHeight()/2);
+		
+		g.setColor(Color.black);
 		g.draw(ult_charge_frame);
 		
+		g.resetFont();
 		// координаты строки, на основе размеров шрифта, и координат макета
 		float ultcharge_y = ult_charge_outline.getY() + (20 - g.getFont().getLineHeight()) / 2;
 		float ultcharge_x = ult_charge_outline.getX() + (40 - g.getFont().getWidth(ult_charge + "%")) / 2;
@@ -148,8 +156,7 @@ public class GameUI {
 		g.texture(decore_hp, heart_icon, true);
 		g.texture(decore_mg, lightning_icon, true);
 		//g.texture(decore_bottom, flower_icon, true);
-		for(Rectangle r: stress) g.texture(r, stress_flower, true);
-		
+		for(int i = 1; i <= pony.stresspoints; i++) g.texture(stress[i-1], stress_flower, true);
 	}
 
 	public void update(int delta) {
@@ -231,10 +238,10 @@ public class GameUI {
 		float flower_width = 25;	
 		float flower_height = 25;		
 		float flower_count = 4;
-		float stressflowers_x = x + baricon_width - flower_width * flower_count;
-		float stressflowers_y = y - flower_height - 10;
+		float stressflowers_x = x + baricon_width;
+		float stressflowers_y = y - baricon_height*2;
 		stress = new Rectangle[4]; 
-		for(int i = 0; i < flower_count; i++) stress[i] = new Rectangle(stressflowers_x+flower_width*i+2, stressflowers_y, flower_width, flower_height);
+		for(int i = 0; i < flower_count; i++) stress[i] = new Rectangle(stressflowers_x-flower_width*i-2, stressflowers_y, flower_width, flower_height);
 		
 		
 		// -------------------декорирующие элементы------------------//
@@ -258,7 +265,6 @@ public class GameUI {
 		float decorebottom_x = ult_x + ult_charge_outline.getWidth()/3*2;
 		float decorebottom_y = ult_y - ult_charge_outline.getHeight()/2;
 		decore_bottom = new Rectangle(decorebottom_x, decorebottom_y, circle_radius * 2 / 3, circle_radius * 2 / 3);
-
 	}
 
 	private void updateOutline() {
@@ -300,8 +306,8 @@ public class GameUI {
 		// макеты стресс-поинтов
 		float flower_width = 20;		
 		float flower_count = 4;
-		float stressflowers_x = x + baricon_width - flower_width * flower_count;
-		for(int i = 0; i < flower_count; i++) stress[i].setX(stressflowers_x+flower_width*i+2);
+		float stressflowers_x = x + baricon_width-20;
+		for(int i = 0; i < flower_count; i++) stress[i].setX(stressflowers_x-flower_width*i-2);
 		
 
 		// -------------------декорирующие элементы------------------//
@@ -335,6 +341,53 @@ public class GameUI {
 		ultcharge_icon = new Image("textures/ui/ultcharge.png");
 		flower_icon = new Image("textures/ui/flower for pony.png");
 		stress_flower = new Image("textures/ui/stress flower.png");
+		
+		atackGroup[0] = fireball_icon;
+		atackGroup[1] = impuls_icon;
+		
+		defenceGroup[0] = shield_icon;
+		defenceGroup[1] = teleport_icon;
 	}
 
+	UnicodeFont hopeFont;
+	private void loadHopefont() {
+		try {
+			Font font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/10447.ttf")).deriveFont(14f);
+			hopeFont = new UnicodeFont(font);
+			hopeFont.addAsciiGlyphs();
+			hopeFont.getEffects().add(new OutlineEffect(2, java.awt.Color.black));
+			hopeFont.getEffects().add(new ColorEffect(new java.awt.Color(247, 62, 95)));
+			hopeFont.loadGlyphs();
+		} catch (FontFormatException | IOException | SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	UnicodeFont powerFont;
+	private void loadPowerfont() {
+		try {
+			Font font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/10447.ttf")).deriveFont(14f);
+			powerFont = new UnicodeFont(font);
+			powerFont.addAsciiGlyphs();
+			powerFont.getEffects().add(new OutlineEffect(1, java.awt.Color.cyan));
+			powerFont.getEffects().add(new ColorEffect(new java.awt.Color(86, 14, 173)));
+			powerFont.loadGlyphs();
+		} catch (FontFormatException | IOException | SlickException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void deactivateExtraSpellgroup (){
+		if (pony.spellgroup.equals(StarlightGlimmer.ATTACKING)) {
+			for (int i = 0; i < defenceGroup.length; i++) {
+				defenceGroup[i].setImageColor(149, 149, 149);
+				//System.out.println(defenceGroup[i]);
+			}
+		} else {
+			for (int i = 0; i < atackGroup.length; i++) {
+				defenceGroup[i].setImageColor(149, 149, 149);
+				//System.out.println(atackGroup[i]);
+			}
+		}
+	}
 }

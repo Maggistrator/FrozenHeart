@@ -3,47 +3,68 @@ package logic.entity;
 import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import it.marteEngine.World;
 import it.marteEngine.entity.Entity;
+import logic.spells.Icicle;
 
 public class EvilSnowman extends Monster {
 	
-	//Alarms names
-	private static final String ATTACK_COOLDOWN_PASSED = "nope!";
+	private int ATACK_COOLDOWN = 100;
 	
 	//numeric constants
 	private int effectiveRange = 550;
 	private int meleeAtackRange = 25;
 	
-	private float SPEED_CONST = 2f;
+	private float SPEED_CONST = 0.5f;
 	
 	Random rand = new Random();
+	Image image;
+	Rectangle textured = new Rectangle(x, y, 120, 140);
 	
 	private boolean isAllowedToMove = true;
 
 	public EvilSnowman(float x, float y, StarlightGlimmer pony) throws SlickException {
 		super(x, y, pony);
 		//добавление циклического таймера на регулярные атаки
-		//addAlarm(ATTACK_COOLDOWN_PASSED, 4, false, true);
-		setGraphic(new Image("textures/snowman/test.png"));
+		image = new Image("textures/snowman/snowman.png");
 		setHitBox(0, 0, 60, 120);
+		addType("MONSTER");
 		hp = 10;
 	}
 
+	int timer = 0;
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		super.update(container, delta);
 		
-		if (isAllowedToMove) {
+		if (isAllowedToMove && getDistance(pony) > pony.width) {
 			recalculateSpeed(delta);
 		} else {
 			speed.x = 0;
 			speed.y = 0;
 		}
 		
+		timer += rand.nextInt(1)+1;
+		if(timer % ATACK_COOLDOWN == 0) {
+			timer = 0;
+			scheduledTask();
+		}
+		
+		textured.setX(x);
+		textured.setY(y);
+	}
+	
+	@Override
+	public void render(GameContainer container, Graphics g) throws SlickException {
+		super.render(container, g);
+		g.texture(textured, image, true);
+		g.draw(textured);
 	}
 	
 	/**
@@ -52,10 +73,9 @@ public class EvilSnowman extends Monster {
 	@Override
 	public void hit(Entity target) {
 		System.err.println("hit!");
-		if(Math.abs(x - pony.x) > meleeAtackRange) {
+		if(getDistance(pony) > pony.width+meleeAtackRange) {
 			throwIcicle();
-		} 
-		else {
+		} else {
 			meleeAtack();
 		}
 	}
@@ -70,13 +90,18 @@ public class EvilSnowman extends Monster {
 	}
 
 	private void throwIcicle() {
-		// TODO Автоматически созданная заглушка метода
-		System.err.println("icicle!");
+		if (rand.nextBoolean()) {
+			System.err.println("icicle!");
+			world.add(new Icicle(x, y, pony.x, pony.y, this), World.GAME);
+			// анимация в разработке
+		}
+		isAllowedToMove = true;
 	}
 	
 	public void meleeAtack() {
 		// TODO Автоматически созданная заглушка метода
 		System.err.println("melee!");
+		isAllowedToMove = true;
 	}
 	
 	@Override
@@ -90,18 +115,11 @@ public class EvilSnowman extends Monster {
 		destroy();
 	}
 	
-	@Override
-	public void alarmTriggered(String name) {
-		//если пришло время атаковать..
-		if (name.equalsIgnoreCase(ATTACK_COOLDOWN_PASSED)) {
-			//..с вероятностью 1 к 2-м мы..
-			if (rand.nextBoolean()) {
-				//..ударим лошадку
-				if (Math.abs(x - pony.x) < effectiveRange) {
-					hit(pony);
-					isAllowedToMove = false;
-				}
-			}
+	public void scheduledTask() {
+		// если пришло время атаковать, ударим лошадку
+		if (Math.abs(x - pony.x) < effectiveRange) {
+			isAllowedToMove = false;
+			hit(pony);
 		}
 	}
 }
