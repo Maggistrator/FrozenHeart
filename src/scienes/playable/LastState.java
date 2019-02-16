@@ -9,6 +9,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -131,7 +132,15 @@ public class LastState extends World {
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 		if(yes.contains(x, y)) game.enterState(Launcher.SCIENE_1);
-		if(no.contains(x, y)) game.enterState(Launcher.MENU);
+		if(no.contains(x, y)) {
+			try {
+				Music music = new Music("res/music/PMV - Control.ogg");
+				music.loop();	
+				game.enterState(Launcher.MENU);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override

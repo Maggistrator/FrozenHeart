@@ -54,13 +54,6 @@ public class MainMenu extends BasicGameState {
     public TrueTypeFont titleTTFont;
     public TrueTypeFont slicFont;
 	private TrueTypeFont activeSlicFont;
-
-	@Override
-	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
-		super.enter(container, game);
-		bgmusic = new Music("res/music/chaykovskiy.ogg");
-		bgmusic.loop(1.0f, 1.0f);
-	}
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
@@ -77,6 +70,11 @@ public class MainMenu extends BasicGameState {
 
 		btnSound = new Sound("res/sounds/mparsons99__snow-crunch.ogg");
 		
+		if (bgmusic == null) {
+			bgmusic = new Music("res/music/PMV - Control.ogg");
+			bgmusic.loop();
+		}
+
 		loadFonts();
 		loadEmitters();
 	}
@@ -169,6 +167,7 @@ public class MainMenu extends BasicGameState {
 		super.mousePressed(button, x, y);
 		if (new_game.hitbox.contains(x, y)) {
 			try {
+				bgmusic.stop();
 				Sound sound = new Sound("res/sounds/aiwha__ding.ogg");
 				sound.play();
 				game.enterState(Launcher.SCIENE_1);
@@ -204,22 +203,18 @@ public class MainMenu extends BasicGameState {
 			switch (selected) {
 			case 1:
 				game.enterState(Launcher.SCIENE_1);
+				bgmusic.stop();
 				break;
 			case 2:
 				game.enterState(Launcher.ABOUT);
 				break;
 			case 3:
 				//выход
+				bgmusic.stop();
 				System.exit(0);
 				break;
 			}
 		}
-	}
-	
-	@Override
-	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
-		super.leave(container, game);
-		bgmusic.stop();
 	}
 	
 	/**проверяет, установлен ли русский шрифт, и если это не так, устанавливает его*/

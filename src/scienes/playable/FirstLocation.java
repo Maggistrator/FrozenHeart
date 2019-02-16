@@ -56,14 +56,14 @@ public class FirstLocation extends World {
 		camera = new MovingAreaCamera(player, new Vector2f(1280, 480), container.getWidth()/5, container.getWidth()/3);
 		ui = new GameUI(container, camera, player);
 		factory = new MonsterFactory(player, container);
-		bgmusic = new Music("res/music/Dregs of a Bitter Cup.ogg");
+		bgmusic = new Music("res/music/Radiarc - Aleph Null [Hybrid Orchestral].ogg");
 		path = new PathBar(container.getWidth() * 3 - 200, container.getWidth(), container.getHeight());
 		
 		add(player, GAME);
 		add(snowman, GAME);
 		
 		container.setTargetFrameRate(60);
-		bgmusic.loop(1.0f, 0.5f);
+		bgmusic.loop();
 	}
 
 	//ShapeRenderer renderer = new ShapeRenderer();
@@ -91,7 +91,9 @@ public class FirstLocation extends World {
 				
 		if(timer % quant == 0) {
 			timer = 0;
-			if(friquency > 0)friquency--;
+			System.out.println("quant = "+quant);
+			System.out.println("friquency = "+friquency);
+			if(friquency > 1)friquency--;
 			quant = rand.nextInt((int)friquency)+100;
 			add(factory.createMonster(), GAME);
 		}
