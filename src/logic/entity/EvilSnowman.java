@@ -34,6 +34,7 @@ public class EvilSnowman extends Monster {
 		//добавление циклического таймера на регулярные атаки
 		image = new Image("textures/snowman/snowman.png");
 		setHitBox(0, 0, 60, 120);
+		width = 60; height = 120;
 		addType("MONSTER");
 		hp = 10;
 	}
@@ -42,7 +43,6 @@ public class EvilSnowman extends Monster {
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		super.update(container, delta);
-		
 		if (isAllowedToMove && getDistance(pony) > pony.width) {
 			recalculateSpeed(delta);
 		} else {
@@ -71,7 +71,6 @@ public class EvilSnowman extends Monster {
 	 * */
 	@Override
 	public void hit(Entity target) {
-		System.err.println("hit!");
 		if(getDistance(pony) > pony.width+meleeAtackRange) {
 			throwIcicle();
 		} else {
@@ -90,8 +89,10 @@ public class EvilSnowman extends Monster {
 
 	private void throwIcicle() {
 		if (rand.nextBoolean()) {
-			System.err.println("icicle!");
-			world.add(new Icicle(x, y, pony.x, pony.y, this), World.GAME);
+			float icicle_x = x < pony.x ? x+width*0.58f : x+(width-width*0.58f);
+			float icicle_y = x < pony.x ? y+height*0.67f : y+(height-height*0.67f);
+			
+			world.add(new Icicle(icicle_x, icicle_y, pony.x + pony.width/2, pony.y+pony.height/2, this), World.GAME);
 			// анимация в разработке
 		}
 		isAllowedToMove = true;
@@ -99,7 +100,6 @@ public class EvilSnowman extends Monster {
 	
 	public void meleeAtack() {
 		// TODO Автоматически созданная заглушка метода
-		System.err.println("melee!");
 		isAllowedToMove = true;
 	}
 	

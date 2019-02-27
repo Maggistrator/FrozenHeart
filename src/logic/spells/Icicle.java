@@ -2,18 +2,12 @@ package logic.spells;
 
 import it.marteEngine.entity.Entity;
 
-import java.io.File;
-import java.io.IOException;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.particles.ParticleEmitter;
-import org.newdawn.slick.particles.ParticleIO;
-import org.newdawn.slick.particles.ParticleSystem;
-
 import logic.entity.Monster;
 import logic.entity.StarlightGlimmer;
 
@@ -30,7 +24,7 @@ public class Icicle extends Entity {
 	private Monster sender;
 
 	private Rectangle get_rect = new Rectangle(x, y, 50, 30);
-	ParticleSystem trail;
+
 	private Image image;
 	private Image flippedCopy;
 
@@ -42,31 +36,21 @@ public class Icicle extends Entity {
 		addType(SOLID);
 		calculateSpeed(SPEED, endx, endy);
 		setHitBox(0, 0, 50, 30);
-		
 		try {
 			image = new Image("textures/spells/icicle.png");
 			flippedCopy = image.getFlippedCopy(true, false);
+			
+			image.setRotation((float)getTargetAngle(x, y, newx, newy)+90f);
+			flippedCopy.setRotation((float)getTargetAngle(x, y, newx, newy)-90);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		
-		//targetAngle = speed.x > 0 ? getTargetAngle() : 360 - getTargetAngle();
-		//вращение пока не работает
 	}
 	
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
-		super.render(container, g);
-//		----начало вращения----
-//		g.rotate(x + width/2, y+height/2, targetAngle);
-//		----------------------
-		
-		if(speed.x < 0) g.texture(get_rect, image, true);
-		else  g.texture(get_rect, flippedCopy, true);
-		
-//		----конец вращения----
-//		g.rotate(x + width/2, y+height/2, -targetAngle);
-//		----------------------
+		if(speed.x < 0) image.draw(get_rect.getX(), get_rect.getY(), 50, 30);
+		else flippedCopy.draw(get_rect.getX(), get_rect.getY(), 50, 30);
 	}
 	
 	@Override
@@ -97,25 +81,6 @@ public class Icicle extends Entity {
 		Vector2f selfCoords = new Vector2f(x, y);
 		Vector2f distance = targetCoords.sub(selfCoords);
 		return distance;
-	}
-
-	private void loadParticles() {
-		try {
-			trail = new ParticleSystem("textures/particles/trail.png", 800);
-			File emitterConfigFile = new File("res/emitters/ice_trail.xml");
-			ParticleEmitter emitter = ParticleIO.loadEmitter(emitterConfigFile);
-			trail.addEmitter(emitter);
-		} catch (IOException e) {
-			System.out.println("ресурсы повреждены: отсутствует эмиттер частиц для эффекта шлейфа шаровой молнии");
-		}
-	}
-
-	public float getTargetAngle() {
-		float angle = 0f;
-		Vector2f targetPos = new Vector2f();
-		
-		angle = getAngleToPosition(targetPos);
-		return angle;
 	}
 	
 	public double getTargetAngle(float startX, float startY, float targetX, float targetY) {

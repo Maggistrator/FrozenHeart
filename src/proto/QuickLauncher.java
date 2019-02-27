@@ -14,7 +14,7 @@ public class QuickLauncher extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-		addState(new SimpleSciene());
+		addState(new Prototype(0));
 		enterState(0);
 	}
 

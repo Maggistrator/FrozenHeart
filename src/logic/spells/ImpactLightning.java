@@ -50,6 +50,8 @@ public class ImpactLightning extends Entity{
 		loadAnim();
 		loadParticles();
 		loadSound();
+		
+		//temp_image.setRotation((float)getTargetAngle(this.x, this.y, newx, newy)+90f);
 	}
 	
 	Color opaqueWhite = new Color(1f, 1f, 1f, 1f); 
@@ -58,9 +60,9 @@ public class ImpactLightning extends Entity{
 		if(timeToBurst) sparkleburst.render(x, y);
 		super.render(container, g);
 		g.setColor(opaqueWhite);
-		if(!timeToBurst) g.texture(get_rect, temp_image, true);
+		if(!timeToBurst) temp_image.draw(get_rect.getX(), get_rect.getY(), 60, 30);
 		g.setColor(Color.white);
-	}
+	}	
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
@@ -129,12 +131,30 @@ public class ImpactLightning extends Entity{
 	private void loadAnim() {
 		//TODO: нарисовать и подгрузить анимации
 		try {
-			temp_image = new Image("textures/spells/lightning.png");
+			temp_image = new Image("textures/spells/lightning2.png");
 		} catch (SlickException e) {
 			System.out.println("вместо шаровой молнии поняша призвала Сотону, и он сожрал нужную пикчу");
 		}	
 	}
+	
+	public double getTargetAngle(float startX, float startY, float targetX, float targetY) {
+		double dist = getDistance(new Vector2f(targetX, targetY));
+		double sinNewAng = (startY - targetY) / dist;
+		double cosNewAng = (targetX - startX) / dist;
+		double angle = 0;
 
+		if (sinNewAng > 0) {
+			if (cosNewAng > 0) {
+				angle = 90 - Math.toDegrees(Math.asin(sinNewAng));
+			} else {
+				angle = Math.toDegrees(Math.asin(sinNewAng)) + 270;
+			}
+		} else {
+			angle = Math.toDegrees(Math.acos(cosNewAng)) + 90;
+		}
+		return angle;
+	}
+	
 	private void loadSound() {
 		try {
 			impactSound = new Sound("res/sounds/lightning_impact.ogg");

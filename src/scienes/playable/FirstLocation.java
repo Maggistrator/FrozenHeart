@@ -66,7 +66,6 @@ public class FirstLocation extends World {
 		bgmusic.loop();
 	}
 
-	//ShapeRenderer renderer = new ShapeRenderer();
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		camera.draw(g);
