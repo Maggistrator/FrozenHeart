@@ -90,11 +90,9 @@ public class FirstLocation extends World {
 				
 		if(timer % quant == 0) {
 			timer = 0;
-			System.out.println("quant = "+quant);
-			System.out.println("friquency = "+friquency);
 			if(friquency > 1)friquency--;
 			quant = rand.nextInt((int)friquency)+100;
-			add(factory.createMonster(), GAME);
+			//add(factory.createMonster(), GAME);
 		}
 		
 		camera.update(container);

@@ -35,9 +35,11 @@ public class PathBar {
 		AngelCodeFont font = (AngelCodeFont) g.getFont();
 		
 		g.drawString(distanceLabel, x, initialY - height - 4);
+
+		float internalWidth = initialDistance - distance > delta ? distance * delta : width - 4;
+		internalWidth = internalWidth > 0 ? internalWidth : 0;// не даём прогресс-бару пересекать левую границу
+		g.fillRoundRect(x + 2, y + 3, internalWidth, height - 5, 4);
 		
-		float internalWidth = initialDistance - distance > delta ? distance*delta : width-4;
-		g.fillRoundRect(x+2, y+3, internalWidth, height-5, 4);
 		g.setColor(Color.white);
 	}
 	

@@ -33,12 +33,14 @@ public class StarlightGlimmer extends Entity{
 	//заклинание на ЛКМ, на ПКМ, и ультимативная способность
 	public static final String SPELL_A = "A";
 	public static final String SPELL_B = "B";
-	public static final String ULTIMATE = "destroy 'em all";	
+	public static final String ULTIMATE = "disintegrate 'em flesh 'n souls";	
 	
 	public float hope = 90;//жизнь, она же - надежда
 	public float power = 90;//энергия, она же - мощь
 	public float stresspoints = 0;//цветы стресса - восстанавливаемые очки поглощения урона
 	public float ultcharge = 0;//процент заряда ультимативной способности
+	
+	public float delta_power = 0.007f;//коэффициент, регулирующий прирост мощи 
 	
 	//текущая избранная группа заклинаний
 	public String spellgroup = ATTACKING;
@@ -55,6 +57,8 @@ public class StarlightGlimmer extends Entity{
 		define(LEFT, Input.KEY_A);
 		define(UP, Input.KEY_W);
 		define(DOWN, Input.KEY_S);
+
+		define(ULTIMATE, Input.KEY_F);
 
 		//клавиши смены группы заклинаний
 		define(ATTACKING, Input.KEY_E);
@@ -82,13 +86,19 @@ public class StarlightGlimmer extends Entity{
 		if(check(LEFT)) speed.x = -2;
 		if(check(UP)) speed.y = -2;
 		if(check(DOWN)) speed.y = 2;
+		if(check(ATTACKING)) {
+			spellgroup = ATTACKING;
+			System.out.println("now spellgroup is ATTACKING");
+		}
+		if(check(PROTECTING)) {
+			spellgroup = PROTECTING;
+			System.out.println("now spellgroup is PROTECTING");
+		}
 		if(check(LEFT)||check(RIGHT)||check(UP)||check(DOWN)) setAnim(ANIM_MOVING);
 		else setAnim(ANIM_CALM);
 		
 		//восстановление энергии
-		if(power<90) {
-			power += 0.1f;
-		}
+		if(power<90) power += delta*delta_power;
 		
 		//подзаряка ультимейта
 		if(ultcharge<100) {
