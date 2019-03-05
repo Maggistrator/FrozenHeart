@@ -39,7 +39,7 @@ public class StarlightGlimmer extends Entity{
 	public float stresspoints = 0;//цветы стресса - восстанавливаемые очки поглощения урона
 	public float ultcharge = 0;//процент заряда ультимативной способности
 	
-	public float delta_power = 0.007f;//коэффициент, регулирующий прирост мощи 
+	public float delta_power = 0.01f;//коэффициент, регулирующий прирост мощи 
 	
 	//текущая избранная группа заклинаний
 	public String spellgroup = ATTACKING;
@@ -51,17 +51,7 @@ public class StarlightGlimmer extends Entity{
 	
 	public StarlightGlimmer(float x, float y) throws SlickException {
 		super(x, y);
-		//клавиши управления
-		define(RIGHT, Input.KEY_D);
-		define(LEFT, Input.KEY_A);
-		define(UP, Input.KEY_W);
-		define(DOWN, Input.KEY_S);
-
-		define(ULTIMATE, Input.KEY_F);
-
-		//клавиши смены группы заклинаний
-		define(ATTACKING, Input.KEY_E);
-		define(PROTECTING, Input.KEY_Q);
+		defineControls();
 		
 		//хитбокс и скорость
 		setHitBox(0, 0, 80, 80);
@@ -85,13 +75,24 @@ public class StarlightGlimmer extends Entity{
 		if(check(LEFT)) speed.x = -2;
 		if(check(UP)) speed.y = -2;
 		if(check(DOWN)) speed.y = 2;
+		
+		if (check(SPELL_A)) {
+			Input input = container.getInput();
+			int mouse_x = input.getMouseX();
+			int mouse_y = input.getMouseY();
+			castSpell(SPELL_A, mouse_x, mouse_y);
+		}else {
+			Input input = container.getInput();
+			int mouse_x = input.getMouseX();
+			int mouse_y = input.getMouseY();
+			castSpell(SPELL_B, mouse_x, mouse_y);
+		}
+		
 		if(check(ATTACKING)) {
 			spellgroup = ATTACKING;
-			System.out.println("now spellgroup is ATTACKING");
 		}
 		if(check(PROTECTING)) {
 			spellgroup = PROTECTING;
-			System.out.println("now spellgroup is PROTECTING");
 		}
 		if(check(LEFT)||check(RIGHT)||check(UP)||check(DOWN)) setAnim(ANIM_MOVING);
 		else setAnim(ANIM_CALM);
@@ -156,6 +157,23 @@ public class StarlightGlimmer extends Entity{
 			hope -= damage;
 		}
 		//вставить анимацию по готовности
+	}
+
+	private void defineControls() {
+		// клавиши управления
+		bindToKey(RIGHT, Input.KEY_D);
+		bindToKey(LEFT, Input.KEY_A);
+		bindToKey(UP, Input.KEY_W);
+		bindToKey(DOWN, Input.KEY_S);
+
+		bindToKey(ULTIMATE, Input.KEY_F);
+
+		// клавиши смены группы заклинаний
+		bindToKey(ATTACKING, Input.KEY_E);
+		bindToKey(PROTECTING, Input.KEY_Q);
+
+		bindToKey(SPELL_A, Input.MOUSE_LEFT_BUTTON);
+		bindToKey(SPELL_B, Input.MOUSE_RIGHT_BUTTON);
 	}
 	
 }

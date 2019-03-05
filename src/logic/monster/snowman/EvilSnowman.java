@@ -69,9 +69,10 @@ public class EvilSnowman extends Monster {
 	
 	/**
 	 * Принятие решения о типе атаки - сами атаки выделены в отдельные методы	
+	 * @throws SlickException 
 	 * */
 	@Override
-	public void hit(Entity target) {
+	public void hit(Entity target) throws SlickException {
 		if(getDistance(pony) > pony.width+meleeAtackRange) {
 			throwIcicle();
 		} else {
@@ -88,7 +89,7 @@ public class EvilSnowman extends Monster {
 		speed = distance.scale(SPEED_CONST);
 	}
 
-	private void throwIcicle() {
+	private void throwIcicle() throws SlickException {
 		if (rand.nextBoolean()) {
 			float icicle_x = x < pony.x ? x+width*0.58f : x+(width-width*0.58f);
 			float icicle_y = x < pony.x ? y+height*0.67f : y+(height-height*0.67f);
@@ -116,7 +117,7 @@ public class EvilSnowman extends Monster {
 		destroy();//умираем
 	}
 	
-	public void scheduledTask() {
+	public void scheduledTask() throws SlickException {
 		// если пришло время атаковать, ударим лошадку
 		if (Math.abs(x - pony.x) < effectiveRange) {
 			isAllowedToMove = false;

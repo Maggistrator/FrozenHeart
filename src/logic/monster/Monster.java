@@ -1,5 +1,7 @@
 package logic.monster;
 
+import org.newdawn.slick.SlickException;
+
 import it.marteEngine.entity.Entity;
 import logic.pony.StarlightGlimmer;
 
@@ -17,6 +19,6 @@ public abstract class Monster extends Entity{
 	
 	public abstract void getHitted(int damage);
 	
-	public abstract void hit(Entity target);
+	public abstract void hit(Entity target) throws SlickException;
 	
 }

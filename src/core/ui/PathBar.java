@@ -2,32 +2,42 @@ package core.ui;
 
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
-public class PathBar {
+import it.marteEngine.entity.Entity;
+
+public class PathBar extends Entity{
+	public static float SCALE_FACTOR = 1;
+	
 	public float initialX, initialY;
-	public float x, y;
-	private float width = 600, height = 20;
 	
 	float initialDistance;
 	float delta;
 	float distance;
 	
 	public PathBar(float initialDistance, int containerWidth, int containerHeight) {
+		super((containerWidth - 600 * SCALE_FACTOR)/2, containerHeight - 20*SCALE_FACTOR*2);
 		this.initialDistance = initialDistance;
-		initialX = x = (containerWidth - width)/2;
-		initialY = y = containerHeight - height*2;
+		initialX = x;
+		initialY = y;
+		
+		width = (int) (600 * SCALE_FACTOR);
+		height = (int) (20 * SCALE_FACTOR);
 		
 		//ищем соотношение 1% расстояния с 1% длины прогрессбара
 		delta = (width/100) / (initialDistance/100); 
 	}
 	
-	public void update(float x, float distance) {
-		this.x = initialX + x;
+	public void update(GameContainer container, float x, float distance, int delta) throws SlickException {
+		super.update(container, delta);
 		this.distance = distance;
 	}
 	
-	public void render(Graphics g) {
+	@Override
+	public void render(GameContainer container, Graphics g) throws SlickException {
+		super.render(container, g);
 		g.setColor(Color.gray);
 		g.drawRoundRect(x, y, width, height, 4);
 		

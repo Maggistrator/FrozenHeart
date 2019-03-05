@@ -20,9 +20,11 @@ import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import core.MovingAreaCamera;
+import it.marteEngine.Camera;
+import it.marteEngine.entity.Entity;
 import logic.pony.StarlightGlimmer;
 
-public class GameUI {
+public class GameUI extends Entity{
 
 	//параметры интерфейса в пикселях
 	//TODO: сделать размеры интерфейса вычисляемыми
@@ -74,22 +76,21 @@ public class GameUI {
 	Image[] defenceGroup = new Image[2];
 
 	GameContainer container;
-	MovingAreaCamera camera;
+	Camera camera;
 	StarlightGlimmer pony;
 
-	public float x, y;
 	private int ult_charge = 0;
 
 	private Graphics g;
 	private ParticleSystem powerfullSparklesEffect;
 	private ParticleSystem powerfullFogEffect;
 
-	public GameUI(GameContainer container, MovingAreaCamera observable, StarlightGlimmer pony) throws SlickException {
+	public GameUI(GameContainer container, Camera observable, StarlightGlimmer pony) throws SlickException {
+		super((container.getWidth() - INTERFACE_WIDTH) / 2, INTERFACE_HEIGHT);
+		setCenterOfRotation((container.getWidth()-INTERFACE_WIDTH)/2, INTERFACE_HEIGHT/2);
 		this.container = container;
 		camera = observable;
 		this.pony = pony;
-		x = (container.getWidth() - INTERFACE_WIDTH) / 2;
-		y = INTERFACE_HEIGHT;
 		constructOutline();
 		loadImages();
 		loadHopefont();
@@ -97,7 +98,9 @@ public class GameUI {
 		setupPowerParticleSystem();
 	}
 
-	public void draw(Graphics g) {
+	@Override
+	public void render(GameContainer container, Graphics g) throws SlickException {
+		super.render(container, g);
 		if (this.g == null) {
 			this.g = g;
 		}
@@ -120,11 +123,16 @@ public class GameUI {
 		powerfullFogEffect.render(power.getX(), power.getY());
 		
 		deactivateExtraSpellgroup();
-		
+
+		if (pony.spellgroup.equals(StarlightGlimmer.ATTACKING)) g.setColor(Color.darkGray);	else g.setColor(Color.white);	
 		g.texture(shield, shield_icon, true);	
+		g.texture(teleport, teleport_icon, true);
+		
+		if (pony.spellgroup.equals(StarlightGlimmer.PROTECTING)) g.setColor(Color.darkGray); else g.setColor(Color.white);	
 		g.texture(fireball, fireball_icon, true);	
-		g.texture(impulse, impuls_icon, true);	
-		g.texture(teleport, teleport_icon, true);		
+		g.texture(impulse, impuls_icon, true);		
+		
+		g.setColor(Color.white);	
 		g.texture(icon, ult, true);
 		g.texture(ult_charge_outline, ultcharge_icon, true);	
 
@@ -167,8 +175,9 @@ public class GameUI {
 		g.setColor(Color.white);
 	}
 
-	public void update(int delta) {
-			x = camera.x + (container.getWidth()-INTERFACE_WIDTH)/2;
+	@Override
+	public void update(GameContainer container, int delta) throws SlickException {
+		super.update(container, delta);
 			
 			int baricon_width = 180;
 			//обновление отображения "надежды" в зависимости от текущего значения поля

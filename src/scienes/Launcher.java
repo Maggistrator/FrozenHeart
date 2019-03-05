@@ -2,9 +2,11 @@ package scienes;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import it.marteEngine.ME;
 import logic.pony.StarlightGlimmer;
 import scienes.playable.LastState;
 import scienes.playable.FirstLocation;
@@ -30,6 +32,8 @@ public class Launcher extends StateBasedGame{
 			addState(new About());
 			addState(new FirstLocation(SCIENE_1, pony));
 			addState(new LastState(FINISH, pony));
+			
+			ME.debugEnabled = true;
 			enterState(MENU);
 		}
 
@@ -39,6 +43,9 @@ public class Launcher extends StateBasedGame{
 				apploader = new AppGameContainer(new Launcher("Frozen Heart"));
 				apploader.setDisplayMode(640, 480, false);
 				apploader.setAlwaysRender(true);
+				apploader.setMultiSample(2);
+				apploader.setSmoothDeltas(true);
+				apploader.setVSync(true);
 				apploader.setUpdateOnlyWhenVisible(true);
 				apploader.start();
 			} catch (SlickException e1) {

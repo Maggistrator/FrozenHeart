@@ -14,9 +14,14 @@ import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 
 import core.MovingAreaCamera;
+import core.Solid;
 import core.ui.GameUI;
 import core.ui.PathBar;
+import it.marteEngine.Camera;
+import it.marteEngine.CameraFollowStyle;
+import it.marteEngine.ME;
 import it.marteEngine.World;
+import it.marteEngine.entity.Entity;
 import logic.monster.MonsterFactory;
 import logic.monster.snowman.EvilSnowman;
 import logic.pony.StarlightGlimmer;
@@ -25,12 +30,10 @@ import scienes.Launcher;
 public class FirstLocation extends World {
 
 	StarlightGlimmer player;
-	MovingAreaCamera  camera;
 	GameUI ui;
 	EvilSnowman snowman;
 	MonsterFactory factory;
 	
-	Image background;
 	PathBar path;
 	
 	Music bgmusic;
@@ -52,30 +55,46 @@ public class FirstLocation extends World {
 		player.ultcharge = 0;
 		
 		snowman = new EvilSnowman(640, 250, player);
-		background = new Image("textures/locations/test.png");
-		camera = new MovingAreaCamera(player, new Vector2f(1280, 480), container.getWidth()/5, container.getWidth()/3);
+
+		Entity background1 = new Solid(0, 0, new Image("textures/locations/test.png"));
+		Entity background2 = new Solid(640, 0, new Image("textures/locations/test.png"));
+		Entity background3 = new Solid(1280, 0, new Image("textures/locations/test.png"));
+		//camera = new Camera(container.getWidth()/5, container.getWidth()/3, 1280, 480);
+		
 		ui = new GameUI(container, camera, player);
 		factory = new MonsterFactory(player, container);
 		bgmusic = new Music("res/music/Radiarc - Aleph Null [Hybrid Orchestral].ogg");
 		path = new PathBar(container.getWidth() * 3 - 200, container.getWidth(), container.getHeight());
-		
+
+		add(background1, GAME);
+		add(background2, GAME);
+		add(background3, GAME);
+
 		add(player, GAME);
 		add(snowman, GAME);
 		
+		add(ui, ABOVE);
+		add(path, ABOVE);
+		
 		container.setTargetFrameRate(60);
-		bgmusic.loop();
+		if (!ME.debugEnabled) bgmusic.loop();
 	}
 
 	@Override
+	public void init(GameContainer container, StateBasedGame game) throws SlickException {
+		super.init(container, game);
+//		player = new StarlightGlimmer(x, y)
+
+		camera.follow(player, CameraFollowStyle.PLATFORMER);
+		camera.setDeadZone(0, 0, 0, 0);
+		
+		camera.setSceneBounds(0, 0, 1920, 480);
+	}
+	
+	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		camera.draw(g);
-		background.draw(0,0);
-		background.draw(640,0);
-		background.draw(1280,0);
-		g.drawString("Press ESC to exit to main menu", camera.x, 460);
 		super.render(container, game, g);
-		ui.draw(g);
-		path.render(g);
+		g.drawString("Press ESC to exit to main menu", 20, 460);
 	}
 
 	int timer = 0;
@@ -95,10 +114,8 @@ public class FirstLocation extends World {
 			//add(factory.createMonster(), GAME);
 		}
 		
-		camera.update(container);
-		ui.update(delta);
 		if(player.hope < 0) game.enterState(Launcher.FINISH);
-		path.update(camera.x, player.x);
+		path.update(container, camera.getX(), player.x, delta);
 		if (player.x > container.getWidth()*3 - 200) {
 			game.enterState(Launcher.FINISH);
 		}
@@ -111,10 +128,10 @@ public class FirstLocation extends World {
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 		if(button == Input.MOUSE_LEFT_BUTTON) {
-			player.castSpell(StarlightGlimmer.SPELL_A, camera.x+x, y);
+			player.castSpell(StarlightGlimmer.SPELL_A, camera.getX()+x, y);
 		}
 		if(button == Input.MOUSE_RIGHT_BUTTON) {
-			player.castSpell(StarlightGlimmer.SPELL_B, camera.x+x, y);
+			player.castSpell(StarlightGlimmer.SPELL_B, camera.getX()+x, y);
 		}
 	}
 	

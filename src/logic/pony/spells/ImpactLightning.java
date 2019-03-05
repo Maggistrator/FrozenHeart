@@ -84,6 +84,7 @@ public class ImpactLightning extends Entity{
 			speed.y = 0;
 			//..взорвём к херам молнию
 			timeToBurst = true;
+			collidable = false;
 			//..и сыграем победный "трунь" по этому поводу
 	        impactSound.play(0.8f, 1f);
 		}
@@ -93,6 +94,7 @@ public class ImpactLightning extends Entity{
 			speed.x = 0.01f;
 			speed.y = 0.01f;
 			timeToBurst = true;
+			collidable = false;
 			melt();
 		}
 	}

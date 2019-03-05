@@ -21,6 +21,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import core.Button;
 import core.TrueTypeFont;
+import it.marteEngine.ME;
 import scienes.Launcher;
 
 public class MainMenu extends BasicGameState {
@@ -72,7 +73,7 @@ public class MainMenu extends BasicGameState {
 		
 		if (bgmusic == null) {
 			bgmusic = new Music("res/music/PMV - Control.ogg");
-			bgmusic.loop();
+			if (!ME.debugEnabled) bgmusic.loop();
 		}
 
 		loadFonts();
