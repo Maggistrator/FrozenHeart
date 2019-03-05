@@ -5,7 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import logic.entity.StarlightGlimmer;
+import logic.pony.StarlightGlimmer;
 import scienes.playable.LastState;
 import scienes.playable.FirstLocation;
 import scienes.transfer.About;

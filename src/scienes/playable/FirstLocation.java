@@ -17,9 +17,9 @@ import core.MovingAreaCamera;
 import core.ui.GameUI;
 import core.ui.PathBar;
 import it.marteEngine.World;
-import logic.entity.EvilSnowman;
-import logic.entity.MonsterFactory;
-import logic.entity.StarlightGlimmer;
+import logic.monster.MonsterFactory;
+import logic.monster.snowman.EvilSnowman;
+import logic.pony.StarlightGlimmer;
 import scienes.Launcher;
 
 public class FirstLocation extends World {

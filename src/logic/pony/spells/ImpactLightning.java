@@ -1,4 +1,4 @@
-package logic.spells;
+package logic.pony.spells;
 
 import java.io.IOException;
 
@@ -15,8 +15,8 @@ import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import it.marteEngine.entity.Entity;
-import logic.entity.Monster;
-import logic.entity.StarlightGlimmer;
+import logic.monster.Monster;
+import logic.pony.StarlightGlimmer;
 
 public class ImpactLightning extends Entity{
 	

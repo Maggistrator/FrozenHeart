@@ -20,7 +20,7 @@ import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import core.MovingAreaCamera;
-import logic.entity.StarlightGlimmer;
+import logic.pony.StarlightGlimmer;
 
 public class GameUI {
 
@@ -338,7 +338,7 @@ public class GameUI {
 
 	private void loadImages() throws SlickException {
 		ult = new Image("textures/ui/ulticon.png");
-		heart_icon = new Image("textures/ui/heart_icon.png");
+		heart_icon = new Image("textures/ui/heart_icon2.png");
 		lightning_icon = new Image("textures/ui/lightning_icon.png");
 		shield_icon = new Image("textures/ui/shield.png");
 		fireball_icon = new Image("textures/ui/fireball flag .png");

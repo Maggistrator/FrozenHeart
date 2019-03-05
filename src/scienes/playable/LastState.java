@@ -16,7 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import core.Button;
 import core.TrueTypeFont;
 import it.marteEngine.World;
-import logic.entity.StarlightGlimmer;
+import logic.pony.StarlightGlimmer;
 import scienes.Launcher;
 
 public class LastState extends World {

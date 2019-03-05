@@ -1,4 +1,4 @@
-package logic.entity;
+package logic.pony;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -11,8 +11,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import it.marteEngine.World;
 import it.marteEngine.entity.Entity;
-import logic.Statistics;
-import logic.spells.ImpactLightning;
+import logic.pony.spells.ImpactLightning;
 
 public class StarlightGlimmer extends Entity{
 

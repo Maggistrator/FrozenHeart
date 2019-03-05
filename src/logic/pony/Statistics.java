@@ -1,4 +1,4 @@
-package logic;
+package logic.pony;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

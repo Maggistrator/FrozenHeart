@@ -1,4 +1,4 @@
-package logic.entity;
+package logic.monster.snowman;
 
 import java.util.Random;
 
@@ -11,7 +11,8 @@ import org.newdawn.slick.geom.Vector2f;
 
 import it.marteEngine.World;
 import it.marteEngine.entity.Entity;
-import logic.spells.Icicle;
+import logic.monster.Monster;
+import logic.pony.StarlightGlimmer;
 
 public class EvilSnowman extends Monster {
 	

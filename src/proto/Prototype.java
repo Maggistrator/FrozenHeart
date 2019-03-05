@@ -6,8 +6,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import it.marteEngine.World;
-import logic.entity.EvilSnowman;
-import logic.entity.StarlightGlimmer;
+import logic.monster.snowman.EvilSnowman;
+import logic.pony.StarlightGlimmer;
 
 public class Prototype extends World {
 

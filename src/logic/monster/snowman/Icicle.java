@@ -1,4 +1,4 @@
-package logic.spells;
+package logic.monster.snowman;
 
 import it.marteEngine.entity.Entity;
 
@@ -8,8 +8,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
-import logic.entity.Monster;
-import logic.entity.StarlightGlimmer;
+
+import logic.monster.Monster;
+import logic.pony.StarlightGlimmer;
 
 public class Icicle extends Entity {
 
