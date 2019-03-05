@@ -14,6 +14,7 @@ import org.newdawn.slick.particles.ParticleEmitter;
 import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
 
+import it.marteEngine.World;
 import it.marteEngine.entity.Entity;
 import logic.monster.Monster;
 import logic.pony.StarlightGlimmer;
@@ -39,28 +40,25 @@ public class ImpactLightning extends Entity{
 	
 	boolean timeToBurst = false;
 	
-	public ImpactLightning(float x, float y, float newx, float newy, StarlightGlimmer sender) {
+	public ImpactLightning(float x, float y, float newx, float newy, StarlightGlimmer sender) throws SlickException {
 		super(x, y);
 		this.sender = sender;
 		this.endx = newx;
 		this.endy = newy;
 		addType(SOLID);
 		calculateSpeed(ORIENTED_MOTION_SPEED, endx, endy);
-		setHitBox(0, 0, 40, 40);
+		setHitBox(40, 0, 40, 40);
 		loadAnim();
 		loadParticles();
 		loadSound();
-		
-		//temp_image.setRotation((float)getTargetAngle(this.x, this.y, newx, newy)+90f);
 	}
 	
 	Color opaqueWhite = new Color(1f, 1f, 1f, 1f); 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		if(timeToBurst) sparkleburst.render(x, y);
-		super.render(container, g);
 		g.setColor(opaqueWhite);
-		if(!timeToBurst) temp_image.draw(get_rect.getX(), get_rect.getY(), 60, 30);
+		if(!timeToBurst) super.render(container, g);
 		g.setColor(Color.white);
 	}	
 
@@ -132,30 +130,28 @@ public class ImpactLightning extends Entity{
 	
 	private void loadAnim() {
 		//TODO: нарисовать и подгрузить анимации
-		try {
-			temp_image = new Image("textures/spells/lightning2.png");
+		try {		
+			Image image;
+		float rotate = 0;
+		if (speed.x > 0) {
+			// если скорость <0, значит, сосулька летит влево
+			image = new Image("textures/spells/lightning2.png");
+			rotate = calculateAngle(x, y, endx, endy) - 90;
+		} else {
+			// в противном случае - вправо
+			image = new Image("textures/spells/lightning2.png").getFlippedCopy(true, false);
+			rotate = calculateAngle(x, y, endx, endy) + 90;
+		}
+
+		setGraphic(image.getScaledCopy(0.15f));
+		setCentered(true);
+		setCenterOfRotation(width / 2, height / 2);
+		this.setAngle((int) rotate);
 		} catch (SlickException e) {
 			System.out.println("вместо шаровой молнии поняша призвала Сотону, и он сожрал нужную пикчу");
 		}	
 	}
-	
-	public double getTargetAngle(float startX, float startY, float targetX, float targetY) {
-		double dist = getDistance(new Vector2f(targetX, targetY));
-		double sinNewAng = (startY - targetY) / dist;
-		double cosNewAng = (targetX - startX) / dist;
-		double angle = 0;
 
-		if (sinNewAng > 0) {
-			if (cosNewAng > 0) {
-				angle = 90 - Math.toDegrees(Math.asin(sinNewAng));
-			} else {
-				angle = Math.toDegrees(Math.asin(sinNewAng)) + 270;
-			}
-		} else {
-			angle = Math.toDegrees(Math.acos(cosNewAng)) + 90;
-		}
-		return angle;
-	}
 	
 	private void loadSound() {
 		try {

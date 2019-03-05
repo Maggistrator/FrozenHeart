@@ -39,7 +39,7 @@ public class StarlightGlimmer extends Entity{
 	public float stresspoints = 0;//цветы стресса - восстанавливаемые очки поглощения урона
 	public float ultcharge = 0;//процент заряда ультимативной способности
 	
-	public float delta_power = 0.01f;//коэффициент, регулирующий прирост мощи 
+	public float delta_power = 0.02f;//коэффициент, регулирующий прирост мощи 
 	
 	//текущая избранная группа заклинаний
 	public String spellgroup = ATTACKING;
@@ -66,6 +66,8 @@ public class StarlightGlimmer extends Entity{
 		setAnim(ANIM_CALM);
 	}
 
+	private int cooldown = 0;
+	
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		super.update(container, delta);
@@ -78,13 +80,15 @@ public class StarlightGlimmer extends Entity{
 		
 		if (check(SPELL_A)) {
 			Input input = container.getInput();
-			int mouse_x = input.getMouseX();
-			int mouse_y = input.getMouseY();
+			float mouse_x = this.world.camera.getX() + input.getMouseX();
+			float mouse_y = input.getMouseY();
 			castSpell(SPELL_A, mouse_x, mouse_y);
-		}else {
+		} 
+		
+		if(check(SPELL_B)){
 			Input input = container.getInput();
-			int mouse_x = input.getMouseX();
-			int mouse_y = input.getMouseY();
+			float mouse_x =  this.world.camera.getX() + input.getMouseX();
+			float mouse_y = input.getMouseY();
 			castSpell(SPELL_B, mouse_x, mouse_y);
 		}
 		
@@ -114,13 +118,16 @@ public class StarlightGlimmer extends Entity{
 			}
 			stresspointsTimer++;
 		}
+		
+		if(cooldown > 0) cooldown--;
 	}
 	
 	public void castSpell(String spell, float mouseX, float mouseY) {
 		try {
 			if (spell.equals(SPELL_A) && spellgroup.equals(ATTACKING)) {
-				if (power > 10) {
+				if (power > 10 && cooldown == 0) {
 					power -= 10;
+					cooldown = 45;
 					world.add(new ImpactLightning(x + width - 20, y, mouseX, mouseY, this), World.GAME);
 					Sound sound = new Sound("res/sounds/cast_lightning.ogg");
 					sound.play();
@@ -172,8 +179,8 @@ public class StarlightGlimmer extends Entity{
 		bindToKey(ATTACKING, Input.KEY_E);
 		bindToKey(PROTECTING, Input.KEY_Q);
 
-		bindToKey(SPELL_A, Input.MOUSE_LEFT_BUTTON);
-		bindToKey(SPELL_B, Input.MOUSE_RIGHT_BUTTON);
+		bindToMouse(SPELL_A, Input.MOUSE_LEFT_BUTTON);
+		bindToMouse(SPELL_B, Input.MOUSE_RIGHT_BUTTON);
 	}
 	
 }
