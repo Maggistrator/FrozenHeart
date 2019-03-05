@@ -11,8 +11,8 @@ import org.newdawn.slick.geom.Vector2f;
 
 import it.marteEngine.World;
 import it.marteEngine.entity.Entity;
-import logic.monster.Monster;
 import logic.pony.StarlightGlimmer;
+import logic.monster.Monster;
 
 public class EvilSnowman extends Monster {
 	
