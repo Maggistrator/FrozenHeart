@@ -106,6 +106,16 @@ public class GameUI extends Entity{
 		}
 		g.setAntiAlias(true);
 		
+		deactivateExtraSpellgroup();
+
+		if (pony.spellgroup.equals(StarlightGlimmer.ATTACKING)) g.setColor(Color.darkGray);	else g.setColor(Color.white);	
+		g.texture(shield, shield_icon, true);	
+		g.texture(teleport, teleport_icon, true);
+		
+		if (pony.spellgroup.equals(StarlightGlimmer.PROTECTING)) g.setColor(Color.darkGray); else g.setColor(Color.white);	
+		g.texture(fireball, fireball_icon, true);	
+		g.texture(impulse, impuls_icon, true);		
+		
 		g.setColor(Color.black);
 		//g.draw(decore_hp);
 		//g.draw(decore_mg);
@@ -121,16 +131,6 @@ public class GameUI extends Entity{
 		
 		powerfullSparklesEffect.render(power.getX(), power.getY());
 		powerfullFogEffect.render(power.getX(), power.getY());
-		
-		deactivateExtraSpellgroup();
-
-		if (pony.spellgroup.equals(StarlightGlimmer.ATTACKING)) g.setColor(Color.darkGray);	else g.setColor(Color.white);	
-		g.texture(shield, shield_icon, true);	
-		g.texture(teleport, teleport_icon, true);
-		
-		if (pony.spellgroup.equals(StarlightGlimmer.PROTECTING)) g.setColor(Color.darkGray); else g.setColor(Color.white);	
-		g.texture(fireball, fireball_icon, true);	
-		g.texture(impulse, impuls_icon, true);		
 		
 		g.setColor(Color.white);	
 		g.texture(icon, ult, true);
@@ -210,7 +210,7 @@ public class GameUI extends Entity{
 		final int baricon_width = 180;
 		final int baricon_height = 20;
 		final int circle_radius = 40;
-		final int flag_width = 45;
+		final int flag_width = 40;
 		final int flag_height = 53;
 
 		// жизнь, мана, иконка персонажа
@@ -222,12 +222,12 @@ public class GameUI extends Entity{
 		// ----------------------------Умения-------------------------------//
 		// шаровая молния
 		float fireball_x = x + baricon_width - 110;
-		float fireball_y = y + baricon_height - baricon_height / 2;
+		float fireball_y = y + baricon_height - baricon_height / 2 - 4;
 		fireball = new Rectangle(fireball_x, fireball_y, flag_width, flag_height);
 
 		// импульс
 		float impulse_x = x + baricon_width - 110 + flag_width;
-		float impulse_y = y + baricon_height - baricon_height / 2;
+		float impulse_y = y + baricon_height - baricon_height / 2 - 4;
 		impulse = new Rectangle(impulse_x, impulse_y, flag_width, flag_height);
 
 		// телекинетическое поле
@@ -287,7 +287,7 @@ public class GameUI extends Entity{
 	private void updateOutline() {
 		final int baricon_width = 180;
 		final int circle_radius = 40;
-		final int flag_width = 45;
+		final int flag_width = 40;
 
 		// жизнь, мана, иконка персонажа
 		hope.setX(x + (baricon_width - hope.getWidth()));
@@ -296,11 +296,11 @@ public class GameUI extends Entity{
 
 		// ----------------------------Умения-------------------------------//
 		// шаровая молния
-		float fireball_x = x + baricon_width - 110;
+		float fireball_x = x + baricon_width - 110 - 10;
 		fireball.setX(fireball_x);
 
 		// импульс
-		float impulse_x = fireball_x + flag_width + 2;
+		float impulse_x = fireball_x + flag_width + 12;
 		impulse.setX(impulse_x);
 
 		// телепорт
@@ -308,7 +308,7 @@ public class GameUI extends Entity{
 		teleport.setX(teleport_x);
 
 		// телекинетическое поле
-		float shield_x = teleport.getX() + flag_width + 2;
+		float shield_x = teleport_x + flag_width + 10;
 		shield.setX(shield_x);
 
 		// заряд "хаотического диссонанса"
@@ -350,14 +350,14 @@ public class GameUI extends Entity{
 		heart_icon = new Image("textures/ui/heart_icon2.png");
 		lightning_icon = new Image("textures/ui/lightning_icon.png");
 		shield_icon = new Image("textures/ui/shield.png");
-		fireball_icon = new Image("textures/ui/fireball flag .png");
-		impuls_icon = new Image("textures/ui/impuls flag .png");
+		fireball_icon = new Image("textures/ui/minimalistic fireball flag .png");
+		impuls_icon = new Image("textures/ui/minimalistic impuls flag.png");
 		teleport_icon = new Image("textures/ui/teleport.png");
 		hope_icon = new Image("textures/ui/hope.png");
 		power_icon = new Image("textures/ui/power.png");
 		ultcharge_icon = new Image("textures/ui/ultcharge.png");
 		flower_icon = new Image("textures/ui/flower for pony.png");
-		stress_flower = new Image("textures/ui/stress flower.png");
+		stress_flower = new Image("textures/ui/stress flower 2.png");
 		
 		atackGroup[0] = fireball_icon;
 		atackGroup[1] = impuls_icon;

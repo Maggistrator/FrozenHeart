@@ -66,7 +66,7 @@ public class StarlightGlimmer extends Entity{
 		setAnim(ANIM_CALM);
 	}
 
-	private int cooldown = 0;
+	private int cooldown = 45;
 	
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {

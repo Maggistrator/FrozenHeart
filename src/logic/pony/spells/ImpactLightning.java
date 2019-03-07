@@ -2,12 +2,14 @@ package logic.pony.spells;
 
 import java.io.IOException;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.particles.ParticleEmitter;
@@ -131,19 +133,27 @@ public class ImpactLightning extends Entity{
 	private void loadAnim() {
 		//TODO: нарисовать и подгрузить анимации
 		try {		
-			Image image;
+			float scale_factor = 0.2f;
+			sheet = new SpriteSheet(new Image("textures/spells/spell_impact2.png").getScaledCopy(scale_factor), (int)(480*scale_factor), (int)(240*scale_factor));
+			Animation anim = new Animation(sheet, 50);
+			
 		float rotate = 0;
 		if (speed.x > 0) {
 			// если скорость <0, значит, сосулька летит влево
-			image = new Image("textures/spells/lightning2.png");
 			rotate = calculateAngle(x, y, endx, endy) - 90;
 		} else {
+			
 			// в противном случае - вправо
-			image = new Image("textures/spells/lightning2.png").getFlippedCopy(true, false);
+			Image[] arr_img = new Image[12];
+			for (int i = 0; i < sheet.getHorizontalCount(); i++) {
+				arr_img[i] = sheet.getSubImage(i, 0).getFlippedCopy(true, false);
+			}
+			anim = new Animation(arr_img, 50);
 			rotate = calculateAngle(x, y, endx, endy) + 90;
 		}
 
-		setGraphic(image.getScaledCopy(0.15f));
+		addAnimation("moving", anim);
+		setAnim("moving");
 		setCentered(true);
 		setCenterOfRotation(width / 2, height / 2);
 		this.setAngle((int) rotate);

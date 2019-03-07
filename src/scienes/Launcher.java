@@ -33,7 +33,7 @@ public class Launcher extends StateBasedGame{
 			addState(new FirstLocation(SCIENE_1, pony));
 			addState(new LastState(FINISH, pony));
 			
-			ME.debugEnabled = true;
+			ME.debugEnabled = false;
 			enterState(MENU);
 		}
 
